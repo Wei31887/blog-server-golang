@@ -1,0 +1,23 @@
+server:
+  address: :8080
+  model: debug 
+
+db:
+  dialects: postgres
+  host: 127.0.0.1
+  port: 5432
+  db: go_blog
+  username: bloger
+  password: 12345
+  charset: utf8
+
+mylog:
+  path: ./log
+  name: sys
+  model: file
+  format: console
+  level: debug
+
+cache:
+  expier: 7200
+  clearup:  600
