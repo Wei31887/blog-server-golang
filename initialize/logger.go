@@ -2,7 +2,6 @@ package initialize
 
 import (
 	"blog/server/global"
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -10,19 +9,23 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-type log struct{}
-var Log = new(log)
+type _zap struct{}
+var Zap = new(_zap)
 
 // InitializeLogger : initialize the log and return zap logger
 func InitializeLogger() (logger *zap.Logger) {
 	// Outputting log to console or file is depend on the config setting
-	core := Log.getLogCore()
+	core := Zap.getLogCore()
 	logger = zap.New(core)
 	return
 }
 
+func filePathName() string {
+	return filepath.Join(global.GLOBAL_CONFIG.Mylog.Path + "/" + global.GLOBAL_CONFIG.Mylog.Name + ".log")
+}
+
 // indicate the location of log file 
-func (l log) getLogWriter() zapcore.WriteSyncer {
+func (z *_zap) getLogWriter() zapcore.WriteSyncer {
 	if global.GLOBAL_CONFIG.Mylog.Model == "console" {
 		return zapcore.AddSync(os.Stdout)
 	} else {
@@ -31,13 +34,9 @@ func (l log) getLogWriter() zapcore.WriteSyncer {
 	}
 }
 
-func filePathName() string {
-	fmt.Println(filepath.Join(global.GLOBAL_CONFIG.Mylog.Path + global.GLOBAL_CONFIG.Mylog.Name + ".log"))
-	return filepath.Join(global.GLOBAL_CONFIG.Mylog.Path + "/" + global.GLOBAL_CONFIG.Mylog.Name + ".log")
-}
 
 // 
-func (l log) getEncoder() zapcore.Encoder {
+func (z *_zap) getEncoder() zapcore.Encoder {
 	if global.GLOBAL_CONFIG.Mylog.Format == "JSON" {
 		return zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
 	}
@@ -45,7 +44,7 @@ func (l log) getEncoder() zapcore.Encoder {
 }
 
 // 
-func (l log) getCoreLevel() zapcore.Level {
+func (z *_zap) getCoreLevel() zapcore.Level {
 	switch global.GLOBAL_CONFIG.Mylog.Level {
 	case "debug":
 		return zapcore.DebugLevel
@@ -65,8 +64,8 @@ func (l log) getCoreLevel() zapcore.Level {
 }
 
 // 
-func (l log) getLogCore() zapcore.Core {
-	return zapcore.NewCore(l.getEncoder(), l.getLogWriter(), l.getCoreLevel())
+func (z *_zap) getLogCore() zapcore.Core {
+	return zapcore.NewCore(z.getEncoder(), z.getLogWriter(), z.getCoreLevel())
 }
 
 

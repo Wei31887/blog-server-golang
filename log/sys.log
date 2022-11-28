@@ -1,2 +1,0 @@
-1.6695297678628721e+09	error	Error fetching URL ...	{"url": "www.google.com", "error": "Get \"www.google.com\": unsupported protocol scheme \"\""}
-1.66952976800673e+09	info	Success! 	{"code": "200 OK", "url": "http://www.google.com"}

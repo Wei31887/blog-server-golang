@@ -9,15 +9,20 @@ import (
 )
 
 func main(){
-	// initialize
+	/*  initialize  */
 	// initialize config
 	initialize.InitializeConfig() 
 	// initialize logger
 	global.GLOBAL_LOG = initialize.InitializeLogger()
+	// initialize databse
+	global.GLOBAL_DB = initialize.InitializeDataBase()
+	if global.GLOBAL_DB != nil {
+		db, _ := global.GLOBAL_DB.DB()
+		defer db.Close()
+	}
 
-
-	simpleHttpGet("www.google.com")
-	simpleHttpGet("http://www.google.com")
+	// simpleHttpGet("www.google.com")
+	// simpleHttpGet("http://www.google.com")
 }
 
 

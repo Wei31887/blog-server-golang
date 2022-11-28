@@ -20,6 +20,9 @@ type Db struct {
   	Username string
   	Password string
   	Charset string
+
+	MaxIdle int		`yaml:"max-idle-conns"`
+	MaxOpen int		`yaml:"max-open-conns"`
 }
 
 type Mylog struct{

@@ -3,13 +3,16 @@ server:
   model: debug 
 
 db:
-  dialects: postgres
+  dialects: psql
   host: 127.0.0.1
   port: 5432
   db: go_blog
   username: bloger
   password: 12345
   charset: utf8
+
+  max-idle-conns: 10
+  max-open-conns: 100
 
 mylog:
   path: ./log
