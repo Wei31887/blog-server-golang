@@ -13,8 +13,7 @@ type _zap struct{}
 var Zap = new(_zap)
 
 // InitializeLogger : initialize the log and return zap logger
-func InitializeLogger() (logger *zap.Logger) {
-	// Outputting log to console or file is depend on the config setting
+func Logger() (logger *zap.Logger) {
 	core := Zap.getLogCore()
 	logger = zap.New(core)
 	return
@@ -26,6 +25,7 @@ func filePathName() string {
 
 // indicate the location of log file 
 func (z *_zap) getLogWriter() zapcore.WriteSyncer {
+	// Outputting log to console or file is depend on the config setting
 	if global.GLOBAL_CONFIG.Mylog.Model == "console" {
 		return zapcore.AddSync(os.Stdout)
 	} else {
@@ -33,7 +33,6 @@ func (z *_zap) getLogWriter() zapcore.WriteSyncer {
 		return zapcore.AddSync(file)
 	}
 }
-
 
 // 
 func (z *_zap) getEncoder() zapcore.Encoder {

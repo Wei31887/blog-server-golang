@@ -24,3 +24,8 @@ mylog:
 cache:
   expier: 7200
   clearup:  600
+
+jwt:
+  signing-key: mysecret
+  expires-time: 7
+  issuer: weitim

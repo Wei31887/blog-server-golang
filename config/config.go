@@ -5,6 +5,7 @@ type Config struct {
 	Db Db			`yaml:"db"`
 	Mylog Mylog		`yaml:"mylog"`
 	Cache Cache		`yaml:"cache"`
+	JWT	  JWT		`yaml:"jwt"`
 }
 
 type Server struct {
@@ -34,7 +35,12 @@ type Mylog struct{
 }
 
 type Cache struct {
-  	Expier int
+  	Expire int
   	Clearup int
 }
 
+type JWT struct {
+	SigningKey string	`yaml:"signing-key"`
+	ExpireTime string	`yaml:"expires-time"`
+	Issuer string 	`yaml:"issuer"`
+}

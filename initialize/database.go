@@ -16,20 +16,21 @@ import (
 type Database struct{}
 var d = new(Database)
 
-func InitializeDataBase() *gorm.DB {
+func DataBase() *gorm.DB {
 	switch global.GLOBAL_CONFIG.Db.Dialects {
 	case "psql":
-		return d.InitializePsql()
+		return d.DBPsql()
 	// case "mysql":
 	// 	return InitializeMysql()
 	default:
-		return d.InitializePsql()
+		return d.DBPsql()
 	}
 }
 
 
 // InitializePsql
-func (d *Database) InitializePsql() *gorm.DB {
+func (d *Database) DBPsql() *gorm.DB {
+	// postgres config
 	psqlConfig := postgres.Config{
 		DSN: d.psqlDsn(),
 	}

@@ -8,9 +8,10 @@ import (
 )
 
 // Parse the config file
-func InitializeConfig() {
+func Config() {
+
 	yamlFile, err := ioutil.ReadFile("./config.yaml")
-	if err != nil {
+	if err != nil { 
 		panic(err)
 	}
 

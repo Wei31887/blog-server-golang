@@ -7,7 +7,6 @@ import (
 )
 
 // Encapsulation of response message
-
 // Define the format of response message
 type Response struct {
 	Code int `json:"code"`

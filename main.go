@@ -1,46 +1,53 @@
 package main
 
 import (
-	"blog/server/global"
+	G "blog/server/global"
 	"blog/server/initialize"
+	"blog/server/router"
+	"log"
 	"net/http"
+	"os"
+	"os/signal"
 
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
-func main(){
+func main() {
 	/*  initialize  */
 	// initialize config
-	initialize.InitializeConfig() 
+	initialize.Config()
+	// others
+	initialize.Others()
 	// initialize logger
-	global.GLOBAL_LOG = initialize.InitializeLogger()
+	G.GLOBAL_LOG = initialize.Logger()
 	// initialize databse
-	global.GLOBAL_DB = initialize.InitializeDataBase()
-	if global.GLOBAL_DB != nil {
-		db, _ := global.GLOBAL_DB.DB()
+	G.GLOBAL_DB = initialize.DataBase()
+	if G.GLOBAL_DB != nil {
+		db, _ := G.GLOBAL_DB.DB()
 		defer db.Close()
 	}
 
-	// simpleHttpGet("www.google.com")
-	// simpleHttpGet("http://www.google.com")
-}
-
-
-// test for logger
-func simpleHttpGet(url string) {
-	resp, err := http.Get(url)
-	if err != nil {
-		global.GLOBAL_LOG.Error(
-			"Error fetching URL ...", 
-			zap.String("url", url), 
-			zap.Error(err))
-	} else {
-		global.GLOBAL_LOG.Info(
-			"Success! ", 
-			zap.String("code", resp.Status), 
-			zap.String("url", url),
-		)
-		resp.Body.Close()
+	gin.SetMode(G.GLOBAL_CONFIG.Server.Model)
+	router := router.InitRouter()
+	server := &http.Server{
+		Addr: G.GLOBAL_CONFIG.Server.Address,
+		Handler: router,
 	}
+
+	// listen
+	go func() {
+		err := server.ListenAndServe()
+		if err != nil && err != http.ErrServerClosed {
+			G.GLOBAL_LOG.Fatal("listen on: ", zap.String("address", err.Error()))
+		}
+		G.GLOBAL_LOG.Info("listen on ", zap.String("address", G.GLOBAL_CONFIG.Server.Address))
+	}()
+
+	quit := make(chan os.Signal)
+	// listen 
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	log.Println("Shutdown Server ...")
 }
 
