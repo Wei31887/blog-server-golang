@@ -1,6 +1,7 @@
 package router
 
 import (
+	"blog/server/admin"
 	"blog/server/api"
 	"blog/server/middleware"
 
@@ -15,17 +16,18 @@ func InitRouter() *gin.Engine {
 	router.Use(gin.Recovery())
 	router.Static("/static", "static")
 
-	// cor
+	// Add middleware: cor
 	router.Use(middleware.Cors())
 
-	// log
+	// Add middleware: log
 	router.Use(middleware.Logger())
 
-	register(router)
+	fronEndRegister(router)
+	AdminRegister(router)
 	return router
 }
 
-func register(router *gin.Engine) {
+func fronEndRegister(router *gin.Engine) {
 	// Query blogger information
 	router.POST("/blogger", api.FindBlogger)
 	// Query total count of blog type
@@ -34,5 +36,11 @@ func register(router *gin.Engine) {
 	router.POST("/blog/list", api.BlogList)
 	// Query content of blog
 	router.POST("/blog/show", api.FindBlog)
+	// Create new comment
+	router.POST("/blog/comment", api.CreateComment)
+}
 
+func AdminRegister(router *gin.Engine) {
+	router.POST("/login", admin.Login)
+	router.POST("/logout", admin.Logout)
 }

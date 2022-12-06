@@ -38,22 +38,41 @@ CREATE TABLE blog (
 );
 
 -- insert test blog
-INSERT INTO blog VALUES (2,
+INSERT INTO blog VALUES (1,
 						 'First blog test',
 						 1,
 						 'blog testblog testblog testblog testblog test',
 						 '<p>blog test</p><p>blog test</p><p>blog test</p><p>blog test</p>',
-						 108,
+						 0,
 						 4,
-						 '2022-12-03 10:19:30','2022-12-03 10:19:30'),
-						 (3,
+						 '2022-12-02 10:19:30','2022-12-02 10:19:30'),
+						 
+						 (2,
 						 'Second blog test',
-						 1,
-						 'blog testblog testblog testblog testblog test',
-						 '<p>blog test</p><p>blog test</p><p>blog test</p><p>blog test</p>',
-						 108,
+						 2,
+						 'Nice one',
+						 '<p>blog test2</p><p>blog test2</p><p>blog test2</p><p>blog test</p>',
+						 10,
 						 4,
-						 '2022-12-04 10:19:30','2022-12-04 10:19:30');
+						 '2022-12-04 22:19:30','2022-12-04 22:19:30'),
+						 
+						 (3,
+						 'Third blog test',
+						 2,
+						 'Nice one',
+						 '<p>blog test3</p><p>blog test3</p><p>blog test</p><p>blog test</p>',
+						 10,
+						 4,
+						 '2022-12-04 22:29:30','2022-12-04 22:29:30'),
+						 
+						 (4,
+						 'Continue blog test',
+						 1,
+						 'blog test blog test2 blog test2 blog test2 blog test',
+						 '<p>blog test</p><p>blog test</p><p>blog test</p><p>blog test</p>',
+						 10,
+						 4,
+						 '2022-12-04 23:19:30','2022-12-04 23:19:30');
 
 
 DROP TABLE IF EXISTS blog_type;

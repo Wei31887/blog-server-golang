@@ -1,10 +1,12 @@
 package api
 
 import (
+	G "blog/server/global"
 	"blog/server/model/response"
 	"blog/server/service"
 	"blog/server/utils"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +14,16 @@ import (
 // FindBlogger : request the blogger information
 func FindBlogger(c *gin.Context) {
 	var blogger service.Blogger
-	result := blogger.Find()
+	result , err := blogger.FindIdFirst()
+	if err != nil {
+		res := response.Response{
+			Code: response.ERROR,
+			Msg: response.GetMsg(response.ERROR),
+		}
+		res.Json(c)
+		return
+	}
+
 	result.Password = ""
 	res := response.Response{
 		Code: response.SUCCESS,
@@ -104,27 +115,67 @@ func FindBlog(c *gin.Context) {
 		return
 	}
 
-	// update the click hit
+	// Update the click hit
 	blog.UpdataClick()
 	// Query the blog with type name by the given blog id
-	result, _ := blog.FindBlogWithTypeName()
-	// 
-	previous, _ := blog.FindPreviousBlog()
-	//
-	next, _ := blog.FindNextBlog()
+	resultBlog, _ := blog.FindBlogWithTypeName()
+	// Query the previous blog
+	prevBlog, _ := blog.FindPreviousBlog()
+	// Query the next blog
+	nextBlog, _ := blog.FindNextBlog()
 	// Query the comments of the blog
 	comments, _ := blog.FindBlogComment()
 
 	resMap := make(map[string]interface{})
-	resMap["last"] = previous
-	resMap["next"] = next
-	resMap["result"] = result
-	resMap["commments"] = comments
+	resMap["last"] = prevBlog
+	resMap["next"] = nextBlog
+	resMap["blog"] = resultBlog
+	resMap["comments"] = comments
 
 	res := response.Response{
 		Code: response.SUCCESS,
 		Msg: response.GetMsg(response.SUCCESS),
 		Data: resMap,
+	}
+	res.Json(c)
+}
+
+// CreateComment : api to create comment
+func CreateComment(c *gin.Context) {
+	var comment service.Comment
+	err := c.BindJSON(&comment)
+	if err != nil {
+		res := response.Response{
+			Code: response.INVALID_PARAMS,
+			Msg: response.GetMsg(response.INVALID_PARAMS),
+		}
+		res.Json(c)
+		return
+	}
+
+	// add ip and time to comment struct
+	comment.Ip = c.ClientIP()
+	comment.AddTime = time.Now().Format(G.DateFormat)
+
+	err = comment.Create()
+	if err != nil {
+		res := response.Response {
+			Code: response.ERROR,
+			Msg: response.GetMsg(response.ERROR),
+		}
+		res.Json(c)
+		return
+	}
+
+	// update blog
+	blog := service.Blog{
+		Id: comment.BlogId,
+	}
+	blog.UpdateReplay()
+
+	res := response.Response {
+		Code: response.SUCCESS,
+		Msg: response.GetMsg(response.SUCCESS),
 	}
 	res.Json(c)
 }

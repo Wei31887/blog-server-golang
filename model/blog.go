@@ -11,5 +11,5 @@ type Blog struct {
 	ReplayHit  int    `gorm:"replay_hit" json:"replay_hit"`
 	AddTime    string `gorm:"add_time" json:"add_time"`
 	UpdateTime string `gorm:"update_time" json:"update_time"`
-	TypeName   string `gorm:"-" json:"type_name"`
+	TypeName   string `gorm:"type_name" json:"type_name"`
 }

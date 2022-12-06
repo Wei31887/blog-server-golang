@@ -1,5 +1,5 @@
 server:
-  address: :8080
+  address: :9526
   model: debug 
 
 db:
@@ -7,8 +7,8 @@ db:
   host: 127.0.0.1
   port: 5432
   db: go_blog
-  username: bloger
-  password: 12345
+  username: weitim
+  password: tim870318
   charset: utf8
 
   max-idle-conns: 10

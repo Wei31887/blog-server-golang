@@ -3,6 +3,7 @@ package response
 var MsgFlags = map[int]string {
     SUCCESS : "ok",
     ERROR : "fail",
+    NOTFOUND : "NOt found",
     INVALID_PARAMS : "error of parameters request",
     ERROR_EXIST_TAG : "tag name already existed",
     ERROR_NOT_EXIST_TAG : "tag does not exist",

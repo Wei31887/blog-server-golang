@@ -34,14 +34,15 @@ func (j *JWT) GenerateToken(userName string) (jwtToken string, err error) {
 	key := strconv.Itoa(time.Now().Nanosecond())
 	var claims = Claims{
 		Username: userName,
-		Key: Md5(key),
+		// Key: Md5(key),
+		Key: key,
 		StandardClaims : jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer: G.GLOBAL_CONFIG.JWT.Issuer,
 		},
 	}
 
-	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	jwtToken, err = tokenClaims.SignedString(j.SigningKey)
 	return 
 }

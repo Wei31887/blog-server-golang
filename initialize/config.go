@@ -9,7 +9,6 @@ import (
 
 // Parse the config file
 func Config() {
-
 	yamlFile, err := ioutil.ReadFile("./config.yaml")
 	if err != nil { 
 		panic(err)

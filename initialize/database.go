@@ -63,7 +63,7 @@ func (d *Database) gormConfig() *gorm.Config {
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		logger.Config{
 		  SlowThreshold: time.Second,   // 
-		  LogLevel:      logger.Silent, // Log level
+		  LogLevel:      logger.Error, // Log level
 		  Colorful:      true,         // color of print
 		},
 	  )
