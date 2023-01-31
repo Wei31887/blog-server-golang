@@ -26,16 +26,14 @@ type Claims struct {
 
 // GenerateToken
 func (j *JWT) GenerateToken(userName string) (jwtToken string, err error) {
-	nowTime := time.Now()
 	dr, _ := ParseDuration(G.GLOBAL_CONFIG.JWT.ExpireTime)
-	expireTime := nowTime.Add(dr * time.Hour)
+	expireTime := time.Now().Add(dr * time.Hour)
 
 	// create the key: use the MD5 algorithm
 	key := strconv.Itoa(time.Now().Nanosecond())
 	var claims = Claims{
 		Username: userName,
-		// Key: Md5(key),
-		Key: key,
+		Key: Md5(key),
 		StandardClaims : jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer: G.GLOBAL_CONFIG.JWT.Issuer,
@@ -53,6 +51,7 @@ func (j *JWT) ParseToken(token string) (*Claims, error) {
 		return j.SigningKey, nil
 	})
 	if tokenClaims != nil {
+		// fmt.Println(err)
 		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
 			return claims, nil
 		}

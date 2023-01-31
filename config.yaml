@@ -27,5 +27,5 @@ cache:
 
 jwt:
   signing-key: mysecret
-  expires-time: 7
+  expires-time: 3h
   issuer: weitim

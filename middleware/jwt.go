@@ -30,7 +30,7 @@ func JWT() gin.HandlerFunc {
 		
 		// Record the log
 		logger := G.GLOBAL_LOG
-		logger.Debug("Get token: ", zap.String("jwt token", tokenStr))
+		logger.Debug("Header token: ", zap.String("jwt token", tokenStr))
 
 		j := utils.NewJWT()
 		tokenCliam, err := j.ParseToken(tokenStr)

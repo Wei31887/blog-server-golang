@@ -46,7 +46,7 @@ func Logger() gin.HandlerFunc {
 		// write the log
 		logger := global.GLOBAL_LOG
 		logger.Info(
-			"(request info)",
+			"Request info:",
 			zap.Int("status-code", layout.Code),
 			zap.Duration("cost-time", layout.CostTime),
 			zap.String("client-ip", layout.ClientIp),

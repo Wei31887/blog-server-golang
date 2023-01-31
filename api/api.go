@@ -36,7 +36,7 @@ func FindBlogger(c *gin.Context) {
 // FindType : request the amount of each type
 func FindType(c *gin.Context) {
 	var blogType service.BlogType
-	result, err := blogType.FindTypeCount()
+	result, err := blogType.FindAllTypeCount()
 	
 	if err != nil {
 		res := response.Response{
@@ -84,7 +84,7 @@ func BlogList(c *gin.Context) {
 		blog.TypeId = typeId
 	}
 	// query the blog list
-	results, err := blog.FindList(*pageInfo)
+	results, err := blog.FindList(pageInfo)
 	if err != nil {
 		res := response.Response{
 			Code: response.ERROR,
@@ -120,14 +120,14 @@ func FindBlog(c *gin.Context) {
 	// Query the blog with type name by the given blog id
 	resultBlog, _ := blog.FindBlogWithTypeName()
 	// Query the previous blog
-	prevBlog, _ := blog.FindPreviousBlog()
-	// Query the next blog
-	nextBlog, _ := blog.FindNextBlog()
+	prevBlog, _ := blog.FindPrevBlogWithType()
+	// // Query the next blog
+	nextBlog, _ := blog.FindNextBlogWithType()
 	// Query the comments of the blog
 	comments, _ := blog.FindBlogComment()
 
 	resMap := make(map[string]interface{})
-	resMap["last"] = prevBlog
+	resMap["prev"] = prevBlog
 	resMap["next"] = nextBlog
 	resMap["blog"] = resultBlog
 	resMap["comments"] = comments
@@ -178,4 +178,17 @@ func CreateComment(c *gin.Context) {
 		Msg: response.GetMsg(response.SUCCESS),
 	}
 	res.Json(c)
+}
+
+// TagList : get the list of tag
+func TagList(c *gin.Context) {
+	var tag service.Tag
+	result, err := tag.TagList()
+	if err != nil {
+		response.ResponseWithCode(c, response.ERROR)
+		return
+	}
+
+	response.SuccessWithData(c, result)
+
 }

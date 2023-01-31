@@ -1,14 +1,14 @@
 package response
 
 var MsgFlags = map[int]string {
-    SUCCESS : "ok",
-    ERROR : "fail",
+    SUCCESS : "Successful Request",
+    ERROR : "Server Fail",
     NOTFOUND : "NOt found",
-    INVALID_PARAMS : "error of parameters request",
-    ERROR_EXIST_TAG : "tag name already existed",
-    ERROR_NOT_EXIST_TAG : "tag does not exist",
-    ERROR_NOT_EXIST_ARTICLE : "article does not exist",
-    ERROR_AUTH_CHECK_TOKEN_FAIL : "Fail to check Token",
+    INVALID_PARAMS : "Error in request parameters",
+    ERROR_EXIST_TAG : "Tag name already existed",
+    ERROR_NOT_EXIST_TAG : "Tag does not exist",
+    ERROR_NOT_EXIST_ARTICLE : "Article does not exist",
+    ERROR_AUTH_CHECK_TOKEN_FAIL : "Request denied (JWT Fail)",
     ERROR_AUTH_CHECK_TOKEN_NOT_FOUND : "Token not found",
     ERROR_AUTH_CHECK_TOKEN_EMPTY : "There's no Token",
     ERROR_AUTH_CHECK_TOKEN_TIMEOUT : "Token time out",

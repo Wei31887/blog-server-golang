@@ -17,7 +17,7 @@ func TestBlog(t *testing.T) {
 
 func TestFindNextBlog(t *testing.T) {
 	blog.Id = 2
-	resBlog, err := blog.FindNextBlog()
+	resBlog, err := blog.FindNextBlogWithType()
 	if err != nil {
 		t.Error("Can't find the next blog", err)
 	}

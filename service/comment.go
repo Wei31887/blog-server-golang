@@ -13,8 +13,22 @@ func (Comment) TableName() string {
 	return "comment"
 }
 
-func (commment *Comment) FindCommentList(page *utils.Page) {
+func (commment *Comment) FindCommentList(page utils.Page) ([]*Comment, error) {
+	commentLists := make([]*Comment, 0)
+	db := G.GLOBAL_DB.Model(commment).Limit(page.Size).Offset(page.GetStartPage()).Find(&commentLists)
+	if (db.Error != nil ) {
+		return nil, db.Error
+	} 
+	return commentLists, nil
+}
 
+func (commment *Comment) Count() (int, error) {
+	var count int64
+	db := G.GLOBAL_DB.Model(commment).Count(&count)
+	if (db.Error != nil ) {
+		return 0, db.Error
+	} 
+	return int(count), nil
 }
 
 // create comment
@@ -25,7 +39,7 @@ func (comment *Comment) Create() error {
 
 // update comment
 func (comment *Comment) UpdateState() error {
-	Db := G.GLOBAL_DB.Where("id = ?", comment.Id).Update("status", 1)
+	Db := G.GLOBAL_DB.Model(comment).Where("id = ?", comment.Id).Update("status", comment.Status)
 	return Db.Error
 }
 

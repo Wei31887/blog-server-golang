@@ -89,6 +89,7 @@ INSERT INTO blog_type VALUES (1,'AWS', 1),(2,'Golang', 6);
 DROP TABLE IF EXISTS comment;
 CREATE TABLE comment (
   id serial primary key NOT NULL,
+  nick_name varchar(50) NOT NULL DEFAULT '',
   ip varchar(50) DEFAULT '',
   content varchar(2000) DEFAULT '',
   blog_id int DEFAULT NULL,
@@ -99,14 +100,41 @@ CREATE TABLE comment (
 
 -- insert test comment 
 INSERT INTO comment VALUES (15,
+							'testMan',
 							'127.0.0.1',
 							'test comment test comment',
-							2,
+							3,
 							0,
 							'2022-12-05 15:12:35'),
 							(16,
+							'testMan2',
 							 '127.0.0.1',
 							 '兄弟你挺牛逼的嘛',
-							 2,
+							 3,
 							 0,
 							 '2022-12-05 20:06:25');
+
+
+DROP TABLE IF EXISTS tag;
+CREATE TABLE tag (
+  id serial primary key NOT NULL,
+  tag_name varchar(50) NOT NULL DEFAULT '',
+  sort int DEFAULT '0'
+);
+
+INSERT INTO tag VALUES	(1, 'blog', '1'),
+						(2, 'Algorithm', '2'),
+						(3, 'Data Structure', '3');
+
+DROP TABLE IF EXISTS blog_tag;
+CREATE TABLE blog_tag (
+  id serial primary key NOT NULL,
+  blog_id int DEFAULT NULL NOT NULL,
+  tag_id int DEFAULT NULL NOT NULL
+);
+
+INSERT INTO blog_tag VALUES	(1, 3, 1),
+							(2, 3, 2),
+							(3, 3, 3),
+							(4, 4, 1),
+							(5, 5, 3);

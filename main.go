@@ -31,7 +31,7 @@ func main() {
 	gin.SetMode(G.GLOBAL_CONFIG.Server.Model)
 	router := router.InitRouter()
 	server := &http.Server{
-		Addr: G.GLOBAL_CONFIG.Server.Address,
+		Addr:    G.GLOBAL_CONFIG.Server.Address,
 		Handler: router,
 	}
 
@@ -45,13 +45,8 @@ func main() {
 	}()
 
 	quit := make(chan os.Signal)
-	// listen 
+	// listen
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 	log.Println("Shutdown Server ...")
 }
-
-
-
-
-
