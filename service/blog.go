@@ -102,22 +102,45 @@ func (blog *Blog) Count() (count int64) {
 }
 
 func (blog *Blog) UpdataClick() (error) {
-	db := G.GLOBAL_DB.Model(blog).Update("click_hit", gorm.Expr("click_hit + 1"))
+	db := G.GLOBAL_DB.Model(blog).
+			Update("click_hit", gorm.Expr("click_hit + 1"))
 	return db.Error
 }
 
 func (blog *Blog) UpdateReplay() (error) {
-	db := G.GLOBAL_DB.Model(blog).Where("id = ? ", blog.Id).Update("replay_hit", gorm.Expr("replay_hit + ?", 1))
+	db := G.GLOBAL_DB.Model(blog).
+			Where("id = ? ", blog.Id).
+			Update("replay_hit", gorm.Expr("replay_hit + ?", 1))
 	return db.Error
 }
 
 // FindBlogComment : query the comment of the blog
 func (blog *Blog) FindBlogComment() ([]Comment, error) {
 	comments := make([]Comment, 0)
-	db := G.GLOBAL_DB.Table("comment").Where("blog_id = ? and status = 0", blog.Id).
-			Order("add_time desc").Find(&comments)
+	db := G.GLOBAL_DB.Table("comment").
+			Where("blog_id = ? and status = 0", blog.Id).
+			Order("add_time desc").
+			Find(&comments)
 	if db.Error != nil {
 		return nil, db.Error
 	}
 	return comments, nil
+}
+
+// BlogListWithTag
+func (blog *Blog) BlogListWithTag(tag *Tag, page *utils.Page) ([]*Blog, error) {
+	blogList := make([]*Blog, 0)
+	db := G.GLOBAL_DB.Model(blog).
+			Select("blog.id, title, typeid, add_time, update_time, click_hit, BLOG_TAG.TAG_ID AS TAG_ID").
+			Joins("INNER JOIN BLOG_TAG ON BLOG.ID = BLOG_TAG.BLOG_ID").
+			Where("tag_id = ", tag.Id).
+			Limit(page.Size).
+			Offset(page.GetStartPage()).
+			Order("BLOG.ID ASC").
+			Find(&blogList)
+	
+	if db.Error != nil {
+		return nil, db.Error
+	}
+	return blogList, nil
 }

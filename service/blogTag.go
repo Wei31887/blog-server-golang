@@ -17,25 +17,30 @@ func (BlogTag) TableName() string {
 }
 
 /* ---- Tag ---- */
-func (t *Tag) Create() error {
-	db := G.GLOBAL_DB.Create(t)
+func (tag *Tag) Create() error {
+	db := G.GLOBAL_DB.Create(tag)
 	return db.Error
 }
 
-func (t *Tag) Update() error {
-	db := G.GLOBAL_DB.Save(t)
+func (tag *Tag) Update() error {
+	db := G.GLOBAL_DB.Save(tag)
 	return db.Error
 }
 
-func (t *Tag) Delete() error {
-	db := G.GLOBAL_DB.Delete(t)
+func (tag *Tag) Delete() error {
+	db := G.GLOBAL_DB.Delete(tag)
 	return db.Error
 }
 
-// TagList
-func (t *Tag) TagList() ([]*Tag, error) {
+// TagList : get the tag list with the count of each tag
+func (tag *Tag) TagList() ([]*Tag, error) {
 	var tagList = make([]*Tag, 0)
-	if db := G.GLOBAL_DB.Order("sort asc").Find(&tagList); db.Error != nil {
+	db := G.GLOBAL_DB.Model(tag).
+					Select("tag.id, tag.tag_name, tag.sort, count(blog_tag.blog_id) as count").
+					Joins("left join blog_tag on tag.id=blog_tag.tag_id").
+					Group("tag.id").
+					Order("tag.id asc").Find(&tagList)
+	if db.Error != nil {
 		return nil, db.Error
 	}
 	return tagList, nil

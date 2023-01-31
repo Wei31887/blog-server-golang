@@ -4,7 +4,7 @@ type Tag struct {
 	Id		int	 	`gorm:"id" json:"id"`
 	TagName string 	`gorm:"tag_name" json:"tag_name"`
 	Sort 	int    	`gorm:"sort" json:"sort"`
-	Count 	int 	`gorm:"-" json:"count"`	
+	Count 	int 	`gorm:"->" json:"count"`	
 }
 
 type BlogTag struct {

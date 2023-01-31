@@ -43,7 +43,7 @@ func frontEndRegister(router *gin.Engine) {
 	// Query Tag list 
 	router.POST("/tag/list", api.TagList)
 	// Query Blog List with Tag
-	// router.POST("/tag/blog", api.BlogListWithTag)
+	router.POST("/tag/blog", api.BlogListWithTag)
 }
 
 func AdminRegister(router *gin.Engine) {

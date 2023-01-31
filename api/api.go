@@ -190,5 +190,33 @@ func TagList(c *gin.Context) {
 	}
 
 	response.SuccessWithData(c, result)
+}
 
+func BlogListWithTag(c *gin.Context) {
+	json := make(map[string]interface{}, 0)
+	err := c.ShouldBind(&json)
+	if err != nil {
+		response.ResponseWithCode(c, response.INVALID_PARAMS)
+		return
+	}
+
+	// organize the query info
+	blog := new(service.Blog)
+	tag := new(service.Tag)
+	tag.Id, _ = strconv.Atoi(utils.ParseJsonString(json["tag_id"]))
+	page, _ := strconv.Atoi(utils.ParseJsonString(json["page"]))
+	size, _ := strconv.Atoi(utils.ParseJsonString(json["size"]))
+	pageInfo := &utils.Page{
+		Page: page,
+		Size: size,
+		Total: int(blog.Count()),
+	}
+	
+	res, err := blog.BlogListWithTag(tag, pageInfo)
+	if err != nil {
+		response.ResponseWithCode(c, response.ERROR)
+		return
+	}
+
+	response.SuccessWithData(c, res)
 }
