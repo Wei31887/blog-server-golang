@@ -5,11 +5,22 @@ import (
 	"blog/server/model/response"
 	"blog/server/service"
 	"blog/server/utils"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+
+
+type blogListInfo struct {
+	TypeId int `json:"type_id"`
+	Page int `json:"page"`
+	Size int `json:"size"`
+	Tags []TagID `json:"tags" binding:"dive"`
+}
+type TagID struct {
+	ID int `json:"tag_id"`
+}
 
 // FindBlogger : request the blogger information
 func FindBlogger(c *gin.Context) {
@@ -57,32 +68,25 @@ func FindType(c *gin.Context) {
 
 // BlogList : request the blog list of one page
 func BlogList(c *gin.Context) {
-	json := make(map[string]interface{}, 0)
-	err := c.ShouldBind(&json)
-	if err != nil {
-		res := response.Response{
-			Code: response.INVALID_PARAMS,
-			Msg: response.GetMsg(response.INVALID_PARAMS),
-		}
-		res.Json(c)
+	var requestInfo blogListInfo
+	if err := c.BindJSON(&requestInfo); err != nil {
+		response.ResponseWithCode(c, response.INVALID_PARAMS)
 		return
 	}
 
-	// organize the query info
+	// organize
 	blog := new(service.Blog)
-	page, _ := strconv.Atoi(utils.ParseJsonString(json["page"]))
-	size, _ := strconv.Atoi(utils.ParseJsonString(json["size"]))
 	pageInfo := &utils.Page{
-		Page: page,
-		Size: size,
+		Page: requestInfo.Page,
+		Size: requestInfo.Size,
 		Total: int(blog.Count()),
 	}
 
 	// get the type id if it exist
-	typeId, err := strconv.Atoi(utils.ParseJsonString(json["type_id"]))
-	if err == nil {
-		blog.TypeId = typeId
+	if requestInfo.TypeId != 0 {
+		blog.TypeId = requestInfo.TypeId
 	}
+
 	// query the blog list
 	results, err := blog.FindList(pageInfo)
 	if err != nil {
@@ -193,26 +197,25 @@ func TagList(c *gin.Context) {
 }
 
 func BlogListWithTag(c *gin.Context) {
-	json := make(map[string]interface{}, 0)
-	err := c.ShouldBind(&json)
-	if err != nil {
+	var requestInfo blogListInfo
+	if err := c.BindJSON(&requestInfo); err != nil {
 		response.ResponseWithCode(c, response.INVALID_PARAMS)
 		return
 	}
 
 	// organize the query info
 	blog := new(service.Blog)
-	tag := new(service.Tag)
-	tag.Id, _ = strconv.Atoi(utils.ParseJsonString(json["tag_id"]))
-	page, _ := strconv.Atoi(utils.ParseJsonString(json["page"]))
-	size, _ := strconv.Atoi(utils.ParseJsonString(json["size"]))
+	tagIdList := make([]int, 0)
+	for _, item := range requestInfo.Tags {
+		tagIdList = append(tagIdList, item.ID)
+	}
 	pageInfo := &utils.Page{
-		Page: page,
-		Size: size,
+		Page: requestInfo.Page,
+		Size: requestInfo.Size,
 		Total: int(blog.Count()),
 	}
 	
-	res, err := blog.BlogListWithTag(tag, pageInfo)
+	res, err := blog.BlogListWithTag(tagIdList, pageInfo)
 	if err != nil {
 		response.ResponseWithCode(c, response.ERROR)
 		return

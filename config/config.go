@@ -40,7 +40,7 @@ type Cache struct {
 }
 
 type JWT struct {
-	SigningKey string	`yaml:"signing-key"`
-	ExpireTime string	`yaml:"expires-time"`
-	Issuer string 	`yaml:"issuer"`
+	SigningKey 	string	`yaml:"signing-key"`
+	ExpireTime 	string	`yaml:"expires-time"`
+	Issuer 		string 	`yaml:"issuer"`
 }

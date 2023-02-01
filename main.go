@@ -15,13 +15,9 @@ import (
 
 func main() {
 	/*  initialize  */
-	// initialize config
 	initialize.Config()
-	// others
 	initialize.Others()
-	// initialize logger
 	G.GLOBAL_LOG = initialize.Logger()
-	// initialize databse
 	G.GLOBAL_DB = initialize.DataBase()
 	if G.GLOBAL_DB != nil {
 		db, _ := G.GLOBAL_DB.DB()

@@ -63,7 +63,8 @@ func (blog *Blog) FindPrevBlogWithType() (*Blog, error) {
 // FindBlogWithTypeName : query the blog with type name by the given blog id
 func (blog *Blog) FindBlogWithTypeName() (*Blog, error) {
 	resBlog := new(Blog)
-	db := G.GLOBAL_DB.Table("blog").Select("*, blog_type.name as type_name").
+	db := G.GLOBAL_DB.Table("blog").
+					Select("*, blog_type.name as type_name").
 					Joins("left join blog_type on blog.typeid = blog_type.id").
 					Where("blog.id = ?", blog.Id).Order("blog_type.sort asc").
 					Find(resBlog)
@@ -80,7 +81,7 @@ func (blog *Blog) FindList(page *utils.Page) ([]*Blog, error) {
 	blogList := make([]*Blog, 0)
 	curDB := G.GLOBAL_DB.Table("blog").Select("blog.id, title, typeid, add_time, update_time, click_hit, blog_type.name as type_name").
 				Joins("left join blog_type on blog.typeid = blog_type.id")
-
+	
 	if blog.TypeId > 0 {
 		curDB = curDB.Where("blog.typeid = ? ", blog.TypeId)
 	}
@@ -128,13 +129,18 @@ func (blog *Blog) FindBlogComment() ([]Comment, error) {
 }
 
 // BlogListWithTag
-func (blog *Blog) BlogListWithTag(tag *Tag, page *utils.Page) ([]*Blog, error) {
+func (blog *Blog) BlogListWithTag(tagIdList []int, page *utils.Page) ([]*Blog, error) {
 	blogList := make([]*Blog, 0)
 	db := G.GLOBAL_DB.Model(blog).
-			Select("blog.id, title, typeid, add_time, update_time, click_hit, BLOG_TAG.TAG_ID AS TAG_ID").
+			Select("blog.id, title, typeid, add_time, update_time, click_hit, blog_type.name as type_name, BLOG_TAG.TAG_ID AS TAG_ID").
 			Joins("INNER JOIN BLOG_TAG ON BLOG.ID = BLOG_TAG.BLOG_ID").
-			Where("tag_id = ", tag.Id).
-			Limit(page.Size).
+			Joins("LEFT JOIN blog_type on BLOG.typeid = blog_type.id")
+	
+	for _, tag := range tagIdList {
+		db = db.Where("tag_id = ?", tag)
+	}
+			
+	db = db.Limit(page.Size).
 			Offset(page.GetStartPage()).
 			Order("BLOG.ID ASC").
 			Find(&blogList)
