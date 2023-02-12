@@ -20,8 +20,6 @@ func DataBase() *gorm.DB {
 	switch global.GLOBAL_CONFIG.Db.Dialects {
 	case "psql":
 		return d.DBPsql()
-	// case "mysql":
-	// 	return InitializeMysql()
 	default:
 		return d.DBPsql()
 	}
@@ -62,9 +60,9 @@ func (d *Database) gormConfig() *gorm.Config {
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		logger.Config{
-		  SlowThreshold: time.Second,   // 
-		  LogLevel:      logger.Error, // Log level
-		  Colorful:      true,         // color of print
+			SlowThreshold: time.Second,		// 
+		  	LogLevel:      logger.Error, 	// Log level
+		  	Colorful:      true,         	// color of print
 		},
 	  )
 	  
@@ -73,9 +71,3 @@ func (d *Database) gormConfig() *gorm.Config {
 	}
 	return config
 }
-
-
-// InitializeMysql
-// func InitializeMysql() *gorm.DB {
-
-// }

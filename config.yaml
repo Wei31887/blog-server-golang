@@ -5,10 +5,10 @@ server:
 db:
   dialects: psql
   host: 127.0.0.1
-  port: 5432
+  port: 5430
   db: go_blog
-  username: weitim
-  password: tim870318
+  username: root
+  password: secret
   charset: utf8
 
   max-idle-conns: 10

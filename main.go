@@ -15,7 +15,7 @@ import (
 
 func main() {
 	/*  initialize  */
-	initialize.Config()
+	initialize.Config(false)
 	initialize.Others()
 	G.GLOBAL_LOG = initialize.Logger()
 	G.GLOBAL_DB = initialize.DataBase()

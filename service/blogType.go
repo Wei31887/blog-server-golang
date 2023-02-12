@@ -48,8 +48,8 @@ func (b *BlogType) FindTypeIdOne() (*BlogType, error){
 // FindTypeCount : query the count of different types
 func (b *BlogType) FindAllTypeCount() ([]map[string]interface{}, error) {
 	typeMaps := make([]map[string]interface{}, 0)
-	sql := `select blog_type.id, count(blog.typeid) as b_count, blog_type.name as b_name from blog 
-			left join blog_type on blog.typeid = blog_type.id 
+	sql := `select blog_type.id, count(blog.type_id) as b_count, blog_type.name as b_name from blog 
+			left join blog_type on blog.type_id = blog_type.id 
 			group by blog_type.id order by id; `
 
 	result, err := G.GLOBAL_DB.Raw(sql).Rows()

@@ -12,7 +12,7 @@ import (
 type _zap struct{}
 var Zap = new(_zap)
 
-// InitializeLogger : initialize the log and return zap logger
+// Logger : initialize the log and return zap logger
 func Logger() (logger *zap.Logger) {
 	core := Zap.getLogCore()
 	logger = zap.New(core)

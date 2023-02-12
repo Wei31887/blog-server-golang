@@ -43,7 +43,7 @@ func (blog *Blog) FindOne() (*Blog, error) {
 // FindNextBlog : query the next blog of given blog
 func (blog *Blog) FindNextBlogWithType() (*Blog, error) {
 	resBlog := new(Blog)
-	db := G.GLOBAL_DB.Select("blog.id, blog.title, blog.typeid").Where("id > ?", blog.Id).First(resBlog)
+	db := G.GLOBAL_DB.Select("blog.id, blog.title, blog.type_id").Where("id > ?", blog.Id).First(resBlog)
 	if db.Error != nil {
 		return nil, db.Error
 	}
@@ -53,7 +53,7 @@ func (blog *Blog) FindNextBlogWithType() (*Blog, error) {
 // FindPreviosBlog : query the previous blog of given blog
 func (blog *Blog) FindPrevBlogWithType() (*Blog, error) {
 	resBlog := new(Blog)
-	db := G.GLOBAL_DB.Select("blog.id, blog.title, blog.typeid").Where("id < ?", blog.Id).Order("id desc").First(resBlog)
+	db := G.GLOBAL_DB.Select("blog.id, blog.title, blog.type_id").Where("id < ?", blog.Id).Order("id desc").First(resBlog)
 	if db.Error != nil {
 		return nil, db.Error
 	}
@@ -65,7 +65,7 @@ func (blog *Blog) FindBlogWithTypeName() (*Blog, error) {
 	resBlog := new(Blog)
 	db := G.GLOBAL_DB.Table("blog").
 					Select("*, blog_type.name as type_name").
-					Joins("left join blog_type on blog.typeid = blog_type.id").
+					Joins("left join blog_type on blog.type_id = blog_type.id").
 					Where("blog.id = ?", blog.Id).Order("blog_type.sort asc").
 					Find(resBlog)
 
@@ -79,11 +79,11 @@ func (blog *Blog) FindBlogWithTypeName() (*Blog, error) {
 // FindList : query the blog list of the page
 func (blog *Blog) FindList(page *utils.Page) ([]*Blog, error) {
 	blogList := make([]*Blog, 0)
-	curDB := G.GLOBAL_DB.Table("blog").Select("blog.id, title, typeid, add_time, update_time, click_hit, blog_type.name as type_name").
-				Joins("left join blog_type on blog.typeid = blog_type.id")
+	curDB := G.GLOBAL_DB.Table("blog").Select("blog.id, title, type_id, add_time, update_time, click_hit, blog_type.name as type_name").
+				Joins("left join blog_type on blog.type_id = blog_type.id")
 	
 	if blog.TypeId > 0 {
-		curDB = curDB.Where("blog.typeid = ? ", blog.TypeId)
+		curDB = curDB.Where("blog.type_id = ? ", blog.TypeId)
 	}
 	
 	// Limit the maximum query number and offset
@@ -132,9 +132,9 @@ func (blog *Blog) FindBlogComment() ([]Comment, error) {
 func (blog *Blog) BlogListWithTag(tagIdList []int, page *utils.Page) ([]*Blog, error) {
 	blogList := make([]*Blog, 0)
 	db := G.GLOBAL_DB.Model(blog).
-			Select("blog.id, title, typeid, add_time, update_time, click_hit, blog_type.name as type_name, BLOG_TAG.TAG_ID AS TAG_ID").
+			Select("blog.id, title, type_id, add_time, update_time, click_hit, blog_type.name as type_name, BLOG_TAG.TAG_ID AS TAG_ID").
 			Joins("INNER JOIN BLOG_TAG ON BLOG.ID = BLOG_TAG.BLOG_ID").
-			Joins("LEFT JOIN blog_type on BLOG.typeid = blog_type.id")
+			Joins("LEFT JOIN blog_type on BLOG.type_id = blog_type.id")
 	
 	for _, tag := range tagIdList {
 		db = db.Where("tag_id = ?", tag)

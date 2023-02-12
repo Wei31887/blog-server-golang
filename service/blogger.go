@@ -12,13 +12,12 @@ func (Blogger) TableName() string {
 	return "blogger"
 }
 
-func (b *Blogger) Create() (*Blogger, error) {
-	blogger := new(Blogger)
-	db := G.GLOBAL_DB.Create(blogger)
+func (b *Blogger) Create() (error) {
+	db := G.GLOBAL_DB.Debug().Create(b)
 	if db.Error != nil {
-		return nil, db.Error
+		return db.Error
 	}
-	return blogger, nil
+	return nil
 }
 
 

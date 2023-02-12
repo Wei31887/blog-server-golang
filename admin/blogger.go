@@ -109,7 +109,7 @@ func UpdatePassword(c *gin.Context) {
 
 	code := response.SUCCESS
 	if blogger.Id <= 0 {
-		if _, err = blogger.Create(); err != nil {
+		if err = blogger.Create(); err != nil {
 			code = response.ERROR
 		}
 	} else {
@@ -139,7 +139,7 @@ func UpdateInfo(c *gin.Context) {
 
 	code := response.SUCCESS
 	if blogger.Id <= 0 {
-		if _, err := blogger.Create(); err != nil {
+		if err := blogger.Create(); err != nil {
 			code = response.ERROR
 		}
 	} else {

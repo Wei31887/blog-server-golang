@@ -10,18 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
-type blogListInfo struct {
-	TypeId int `json:"type_id"`
-	Page int `json:"page"`
-	Size int `json:"size"`
-	Tags []TagID `json:"tags" binding:"dive"`
-}
-type TagID struct {
-	ID int `json:"tag_id"`
-}
-
 // FindBlogger : request the blogger information
 func FindBlogger(c *gin.Context) {
 	var blogger service.Blogger
@@ -64,6 +52,16 @@ func FindType(c *gin.Context) {
 		Data: result,
 	}
 	res.Json(c)
+}
+
+type blogListInfo struct {
+	TypeId int `json:"type_id"`
+	Page int `json:"page"`
+	Size int `json:"size"`
+	Tags []TagID `json:"tags" binding:"dive"`
+}
+type TagID struct {
+	ID int `json:"tag_id"`
 }
 
 // BlogList : request the blog list of one page
