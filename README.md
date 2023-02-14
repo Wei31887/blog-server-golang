@@ -1,6 +1,6 @@
 # blog-server-golang
 
-使用Gin + Vue3 + Element Plus 的前後端分離部落格 Blog 專案，外加Admin後台管理系統，集中管理部落客文章內容、文章分類、tags、留言管理。
+使用Gin + Vue3 + Element Plus 的前後端分離部落格 Blog 專案。採用 Gin 框架架設後端 server ，支援中間件 JWT 認證、日誌管理，資料庫採用 Postgresql 架設，關聯式管理部落客文章內容、文章分類、tags、留言等。
 
 - **[Blog Front-end Project](https://github.com/Wei31887/blog-front-vue)**
 - **[Admin Front-end Project](https://github.com/Wei31887/blog-admin-vue)**
@@ -34,8 +34,8 @@
 
 ```bash
 # 新建目錄
-mkdir blogserver
-cd blogserver
+mkdir blog_golang_vue
+cd blog_golang_vue
 ```
 
 ### Git clone
@@ -44,6 +44,11 @@ cd blogserver
 # clone server 程式碼
 git clone https://github.com/Wei31887/blog-server-golang.git
 
+# clone blog front-end 程式碼
+git clone https://github.com/Wei31887/blog-front-vue.git
+
+# clone admin front-end 程式碼
+git clone https://github.com/Wei31887/blog-admin-vue.git
 ```
 
 ### 開始運行
@@ -51,8 +56,8 @@ git clone https://github.com/Wei31887/blog-server-golang.git
 #### 初始化運行
 
 ```bash
-# 進入 blog-server-glang 後端
-cd ./blog-server-glang
+# 進入 blog-server-glang 專案後端 server 部分
+cd ./server
 
 go mod tidy
 
