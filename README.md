@@ -2,8 +2,8 @@
 
 使用Gin + Vue3 + Element Plus 的前後端分離部落格 Blog 專案，外加Admin後台管理系統，集中管理部落客文章內容、文章分類、tags、留言管理。
 
-- [Blog Front-end Project](https://github.com/Wei31887/blog-front-vue)
-- [Admin Front-end Project](https://github.com/Wei31887/blog-admin-vue)
+- **[Blog Front-end Project](https://github.com/Wei31887/blog-front-vue)**
+- **[Admin Front-end Project](https://github.com/Wei31887/blog-admin-vue)**
 
 ## Features
 
@@ -17,12 +17,12 @@
 
 ## 技術
 
-1. Gin 框架實現 RESTful API 及 middleware 處理
-2. jwt-go 實現 JWT 認證
-3. go-migrate 實現資料庫遷移
-4. gorm 實現存取資料庫
-5. viper 實現 config 初始化
-6. zap 實現日誌log
+1. [gin-gonic/gin](https://github.com/gin-gonic/gin) Gin 框架實現 RESTful API 及 middleware 處理
+2. [jwt-go](https://github.com/dgrijalva/jwt-go) 實現 JWT 認證
+3. [golang-migrate/migrate](https://github.com/golang-migrate/migrate) 實現資料庫遷移
+4. [gorm.io/gorm](https://gorm.io) 實現存取資料庫
+5. [viper](https://github.com/spf13/viper) 實現 config 初始化
+6. [uber-go/zap](https://github.com/uber-go/zap) zap實現日誌log管理
 
 ## 環境
 
