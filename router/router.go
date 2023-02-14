@@ -67,7 +67,6 @@ func AdminRegister(router *gin.Engine) {
 		jwt.POST("/blog/delete", admin.BlogDelete)
 		jwt.POST("/comment/list", admin.CommentList)
 		jwt.POST("/comment/updateStatus", admin.CommentStatus)
-		// jwt.POST("/comment/list", admin.CommentList)
 		jwt.POST("/comment/delete", admin.CommentDelete)
 	}
 }

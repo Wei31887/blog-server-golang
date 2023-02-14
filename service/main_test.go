@@ -8,7 +8,8 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	initialize.Config(true)
+	path := "../"
+	initialize.Config(path)
 	initialize.Others()
 	G.GLOBAL_LOG = initialize.Logger()
 	G.GLOBAL_DB = initialize.DataBase()
