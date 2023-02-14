@@ -2,8 +2,8 @@
 
 使用Gin + Vue3 + Element Plus 的前後端分離部落格 Blog 專案，外加Admin後台管理系統，集中管理部落客文章內容、文章分類、tags、留言管理。
 
-[Blog Front-end Project](https://github.com/Wei31887/blog-front-vue)
-[Admin Front-end Project](https://github.com/Wei31887/blog-admin-vue)
+- [Blog Front-end Project](https://github.com/Wei31887/blog-front-vue)
+- [Admin Front-end Project](https://github.com/Wei31887/blog-admin-vue)
 
 ## Features
 
@@ -63,7 +63,7 @@ go build
 vi config.yaml 
 ```
 
-#### 以 Dcoker 初始化資料庫並運行程式
+#### 以 Docker 初始化資料庫並運行程式
 
 ``` bash
 # 首次須先配置資料庫
