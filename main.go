@@ -17,8 +17,8 @@ func main() {
 	/*  initialize  */
 	configPath := "."
 	initialize.Config(configPath)
-	initialize.Others()
 	G.GLOBAL_LOG = initialize.Logger()
+	G.GLOBAL_REDIS = initialize.Redis()
 	G.GLOBAL_DB = initialize.DataBase()
 	if G.GLOBAL_DB != nil {
 		db, _ := G.GLOBAL_DB.DB()

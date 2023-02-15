@@ -21,11 +21,14 @@ mylog:
   format: console
   level: debug
 
-cache:
-  expier: 7200
-  clearup:  600
+redis:
+  host: 127.0.0.1
+  port: 6379
+  db: 0
+  password:
 
 jwt:
   signing-key: mysecret
-  expires-time: 3h
+  expires-time: 15m
   issuer: user
+  jwt_blacklist_grace_period: 10

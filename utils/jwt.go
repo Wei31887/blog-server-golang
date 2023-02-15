@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"golang.org/x/net/context"
 )
 
 type JWT struct{
@@ -27,8 +28,8 @@ type Claims struct {
 // GenerateToken
 func (j *JWT) GenerateToken(userName string) (jwtToken string, err error) {
 	dr, _ := ParseDuration(G.GLOBAL_CONFIG.JWT.ExpireTime)
-	expireTime := time.Now().Add(dr * time.Hour)
-
+	expireTime := time.Now().Add(dr)
+	
 	// create the key: use the MD5 algorithm
 	key := strconv.Itoa(time.Now().Nanosecond())
 	var claims = Claims{
@@ -59,3 +60,32 @@ func (j *JWT) ParseToken(token string) (*Claims, error) {
 	return nil, err
 }
 
+// GetJWTBlackList
+func(j *JWT) GetJWTBlackList(tokenStr string) string {
+	return "jwt_balck_list:" + Md5(tokenStr)
+}
+
+// JoinBlackList
+func (j *JWT) JoinBlackList(tokenStr string) (err error) {
+	joinUnix := time.Now().Unix()
+	timer := time.Duration(15) * time.Minute
+	err = G.GLOBAL_REDIS.SetNX(context.Background(), j.GetJWTBlackList(tokenStr), joinUnix, timer).Err()
+
+	return
+}
+
+// IsInBlackList
+func(j *JWT) IsInBlackList(tokenStr string) bool {
+	valUnixStr, err := G.GLOBAL_REDIS.Get(context.Background(), j.GetJWTBlackList(tokenStr)).Result()
+	if err != nil || valUnixStr == "" {
+		return false
+	}
+	valUnix, err := strconv.ParseInt(valUnixStr, 10, 64)
+	if err != nil {
+		return false
+	}
+	if time.Now().Unix() - valUnix > G.GLOBAL_CONFIG.JWT.JwtBlacklistGracePeriod {
+		return false
+	}
+	return true
+}

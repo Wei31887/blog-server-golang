@@ -16,43 +16,35 @@ func InitRouter() *gin.Engine {
 	router.Use(gin.Recovery())
 	router.Static("/static", "static")
 
-	// Add middleware: cor
+	// Add middleware
 	router.Use(middleware.Cors())
-
-	// Add middleware: log
 	router.Use(middleware.Logger())
 
-	// router for front end
-	frontEndRegister(router)
-	// router for admin
-	AdminRegister(router)
+	ApiGroupfrontEndRegister(router)
+	ApiGroupAdminRegister(router)
+
 	return router
 }
 
-func frontEndRegister(router *gin.Engine) {
-	// Query blogger information
+func ApiGroupfrontEndRegister(router *gin.Engine) {
 	router.POST("/blogger", api.FindBlogger)
-	// Query total count of blog type
 	router.POST("/blog/type", api.FindType)
-	// Query blog list
 	router.POST("/blog/list", api.BlogList)
-	// Query content of blog
 	router.POST("/blog/content", api.FindBlog)
-	// Create new comment
 	router.POST("/blog/comment", api.CreateComment)
-	// Query Tag list 
 	router.POST("/tag/list", api.TagList)
-	// Query Blog List with Tag
 	router.POST("/tag/blog", api.BlogListWithTag)
 }
 
-func AdminRegister(router *gin.Engine) {
+func ApiGroupAdminRegister(router *gin.Engine) {
 	router.POST("/login", admin.Login)
-	router.POST("/logout", admin.Logout)
-
+	
+	authRouter := router.Group("", middleware.JWT())
+	authRouter.POST("/logout", admin.Logout)
+	
 	jwt := router.Group("/admin", middleware.JWT())
-
-	{
+	{	
+		
 		jwt.POST("/blogger/find", admin.FindBlogger)
 		jwt.POST("/blogger/updatePassword", admin.UpdatePassword)
 		jwt.POST("/blogger/updateInfo", admin.UpdateInfo)

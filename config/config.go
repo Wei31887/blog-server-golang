@@ -4,7 +4,7 @@ type Config struct {
 	Server Server	`yaml:"server"`
 	Db Db			`yaml:"db"`
 	Mylog Mylog		`yaml:"mylog"`
-	Cache Cache		`yaml:"cache"`
+	Redis Redis		`yaml:"redis"`
 	JWT	  JWT		`yaml:"jwt"`
 }
 
@@ -34,13 +34,16 @@ type Mylog struct{
 	Level string	`yaml:"level"`
 }
 
-type Cache struct {
-  	Expire int	`yaml:"expire"`
-  	Clearup int	`yaml:"clearup"`
+type Redis struct {
+	Host string `yaml:"host"`
+	Port int  `yaml:"port"`
+	Db int `yaml:"db"`
+	Password string `yaml:"password"`
 }
 
 type JWT struct {
-	SigningKey 	string	`yaml:"signing-key"`
-	ExpireTime 	string	`yaml:"expires-time"`
-	Issuer 		string 	`yaml:"issuer"`
+	SigningKey 	string	`mapstructure:"signing-key" yaml:"signing-key"`
+	ExpireTime 	string	`mapstructure:"expires-time" yaml:"expires-time"`
+	Issuer 		string 	`mapstructure:"issuer" yaml:"issuer"`
+	JwtBlacklistGracePeriod int64 	`mapstructure:"jwt_blacklist_grace_period" yaml:"jwt_blacklist_grace_period"`
 }

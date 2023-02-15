@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
-	"strings"
 	"time"
 )
 
@@ -17,7 +16,7 @@ func Md5(s string) string {
 
 // Parse string to time.Duration type
 func ParseDuration(d string) (time.Duration, error) {
-	d = strings.TrimSpace(d)
+	// d = strings.TrimSpace(d)
 	dr, err := time.ParseDuration(d)
 
 	return dr, err

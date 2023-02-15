@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"blog/server/global"
-	"io/ioutil"
+	"io"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +30,7 @@ func Logger() gin.HandlerFunc {
 		// during time of request
 		latencyTime := time.Since(startTime)
 		// body of request
-		body, _ := ioutil.ReadAll(c.Request.Body)
+		body, _ := io.ReadAll(c.Request.Body)
 
 		layout := LogLayout{
 			Code:          c.Writer.Status(),

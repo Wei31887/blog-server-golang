@@ -10,7 +10,7 @@ import (
 func TestMain(m *testing.M) {
 	path := "../"
 	initialize.Config(path)
-	initialize.Others()
+	// initialize.Others()
 	G.GLOBAL_LOG = initialize.Logger()
 	G.GLOBAL_DB = initialize.DataBase()
 	if G.GLOBAL_DB != nil {

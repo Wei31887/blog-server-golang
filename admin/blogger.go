@@ -62,11 +62,15 @@ func Login(c *gin.Context) {
 
 // Logout
 func Logout(c *gin.Context) {
-	// delete the jwt token
-	// http.SetCookie(c.Writer, &http.Cookie{
-	// 	Name:     "token",
-	// 	MaxAge:   -1,
-	// })
+	j := utils.NewJWT()
+	if j.JoinBlackList(c.GetHeader("token")) != nil {
+		res := response.Response{
+			Code: response.ERROR,
+			Msg: response.GetMsg(response.ERROR),
+		}
+		res.Json(c)
+		return
+	}
 	res := response.Response{
 		Code: response.SUCCESS,
 		Msg: response.GetMsg(response.SUCCESS),

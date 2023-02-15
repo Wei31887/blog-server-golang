@@ -12,6 +12,7 @@ var MsgFlags = map[int]string {
     ERROR_AUTH_CHECK_TOKEN_NOT_FOUND : "Token not found",
     ERROR_AUTH_CHECK_TOKEN_EMPTY : "There's no Token",
     ERROR_AUTH_CHECK_TOKEN_TIMEOUT : "Token time out",
+    ERROR_AUTH_CHECK_TOKEN_IN_BLACK_LIST: "Token is in black list",
     ERROR_AUTH_TOKEN : "Fail to generate Token",
     ERROR_AUTH : "Token error",
 }
