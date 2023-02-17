@@ -14,11 +14,7 @@ import (
 func BlogSave(c *gin.Context) {
 	var blog service.Blog
 	if err := c.BindJSON(&blog); err != nil {
-		res := response.Response{
-			Code: response.INVALID_PARAMS,
-			Msg: response.GetMsg(response.INVALID_PARAMS),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
@@ -35,18 +31,14 @@ func BlogSave(c *gin.Context) {
 		}
 	}
 
-	res := response.Response{
-		Code: code,
-		Msg: response.GetMsg(code),
-	}
-	res.Json(c)
+	response.CodeResponse(c, code)
 }
 
 
 func BlogList(c *gin.Context) {
 	var page utils.Page
 	if err := c.BindJSON(&page); err != nil {
-		response.ResponseWithCode(c, response.INVALID_PARAMS)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
@@ -54,54 +46,47 @@ func BlogList(c *gin.Context) {
 	page.Total = int(blog.Count())
 	result, err := blog.FindList(&page) 
 	if err != nil {
-		response.ResponseWithCode(c, response.ERROR)
+		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
-	response.SuccessWithData(c, result)
+	res := response.Response{
+		Data: result,
+	}
+	res.Json(c)
 }
 
 
 func BlogFindOne(c *gin.Context) {
 	var blog service.Blog
 	if err := c.BindJSON(&blog); err != nil {
-		res := response.Response{
-			Code: response.INVALID_PARAMS,
-			Msg: response.GetMsg(response.INVALID_PARAMS),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
 	result, err := blog.FindOne()
 	if err != nil {
-		res := response.Response{
-			Code: response.ERROR,
-			Msg: response.GetMsg(response.ERROR),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
 	res := response.Response{
-		Code: response.SUCCESS,
-		Msg: response.GetMsg(response.SUCCESS),
 		Data: result,
 	}
 	res.Json(c)
-	
 }
 
 func BlogDelete(c *gin.Context) {
 	var blog service.Blog
 	if err := c.BindJSON(&blog); err != nil {
-		response.ResponseWithCode(c, response.INVALID_PARAMS)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
 	if err := blog.Delete(); err != nil {
-		response.ResponseWithCode(c, response.ERROR)
+		response.CodeResponse(c, response.ERROR)
 		return
 	}
-	response.SuccessResponse(c)
+	
+	response.CodeResponse(c, response.SUCCESS)
 }

@@ -1,10 +1,13 @@
 package response
 
+import "net/http"
+
 const (
-    SUCCESS = 0
-    ERROR = 500
-    INVALID_PARAMS = 400
-    NOTFOUND = 404
+    SUCCESS = http.StatusOK
+    ERROR = http.StatusInternalServerError
+    BADREQUEST = http.StatusBadRequest
+    NOTFOUND = http.StatusNotFound
+    FORBIDDEN = http.StatusForbidden
 
     ERROR_EXIST_TAG = 10001
     ERROR_NOT_EXIST_TAG = 10002

@@ -14,15 +14,9 @@ func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenStr := c.GetHeader("token")
 
-		code := response.SUCCESS
 		// Check the token from header is empty or not
 		if tokenStr == "" {
-			code = response.ERROR_AUTH_CHECK_TOKEN_NOT_FOUND
-			res := response.Response{
-				Code: code,
-				Msg: response.GetMsg(code),
-			}
-			res.Json(c)
+			response.CodeResponse(c, response.ERROR_AUTH_CHECK_TOKEN_NOT_FOUND)
 			c.Abort()
 			return
 		} 
@@ -34,7 +28,7 @@ func JWT() gin.HandlerFunc {
 
 		// JWT authentication
 		j := utils.NewJWT()
-		
+		code := response.SUCCESS
 		// Validate the JWT token and the JWT token is in the black list or not
 		tokenCliam, err := j.ParseToken(tokenStr)
 		if err != nil {
@@ -44,11 +38,7 @@ func JWT() gin.HandlerFunc {
 		}
 		
 		if code != response.SUCCESS {
-			res := response.Response{
-				Code: code,
-				Msg: response.GetMsg(code),
-			}
-			res.Json(c)
+			response.CodeResponse(c, code)
 			c.Abort()
 			return
 		}

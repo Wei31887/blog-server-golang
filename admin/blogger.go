@@ -13,30 +13,18 @@ func Login(c *gin.Context) {
 	var blogger service.Blogger
 	err := c.BindJSON(&blogger)
 	if err != nil {
-		res := response.Response{
-			Code: response.INVALID_PARAMS,
-			Msg: response.GetMsg(response.INVALID_PARAMS),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
 	queryBloger, _ := blogger.FindByName()
 	if queryBloger == nil {
-		res := response.Response{
-			Code: response.NOTFOUND,
-			Msg: "User not found!",
-		}
-		res.Json(c)
+		response.MsgResponse(c, response.FORBIDDEN, "User not found")
 		return
 	}
 
 	if blogger.Password != queryBloger.Password {
-		res := response.Response{
-			Code: response.INVALID_PARAMS,
-			Msg: "Wrong password!",
-		}
-		res.Json(c)
+		response.MsgResponse(c, response.FORBIDDEN, "Wrong password!")
 		return
 	}
 
@@ -44,17 +32,11 @@ func Login(c *gin.Context) {
 	j := utils.NewJWT()
 	jwtToken, err := j.GenerateToken(blogger.Username)
 	if err != nil {
-		res := response.Response{
-			Code: response.ERROR,
-			Msg: response.GetMsg(response.ERROR),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
 	res := response.Response{
-		Code: response.SUCCESS,
-		Msg: response.GetMsg(response.SUCCESS),
 		Data: jwtToken,
 	}
 	res.Json(c)
@@ -63,19 +45,11 @@ func Login(c *gin.Context) {
 // Logout
 func Logout(c *gin.Context) {
 	j := utils.NewJWT()
-	if j.JoinBlackList(c.GetHeader("token")) != nil {
-		res := response.Response{
-			Code: response.ERROR,
-			Msg: response.GetMsg(response.ERROR),
-		}
-		res.Json(c)
+	if err := j.JoinBlackList(c.GetHeader("token")); err != nil {
+		response.CodeResponse(c, response.ERROR_AUTH_CHECK_TOKEN_IN_BLACK_LIST)
 		return
 	}
-	res := response.Response{
-		Code: response.SUCCESS,
-		Msg: response.GetMsg(response.SUCCESS),
-	}
-	res.Json(c)
+	response.CodeResponse(c, response.SUCCESS)
 }
 
 //
@@ -83,16 +57,10 @@ func FindBlogger(c *gin.Context) {
 	var blogger service.Blogger
 	queryBlogger, err := blogger.FindIdFirst()
 	if err != nil {
-		res := response.Response{
-			Code: response.ERROR,
-			Msg: response.GetMsg(response.ERROR),
-		}
-		res.Json(c)
+		response.MsgResponse(c, response.FORBIDDEN, "User not found")
 		return
 	}
 	res := response.Response{
-		Code: response.SUCCESS,
-		Msg: response.GetMsg(response.SUCCESS),
 		Data: queryBlogger,
 	}
 	res.Json(c)
@@ -103,11 +71,7 @@ func UpdatePassword(c *gin.Context) {
 	var blogger service.Blogger
 	err := c.BindJSON(&blogger)
 	if err != nil {
-		res := response.Response{
-			Code: response.INVALID_PARAMS,
-			Msg: response.GetMsg(response.INVALID_PARAMS),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
@@ -122,22 +86,14 @@ func UpdatePassword(c *gin.Context) {
 		}
 	}
 
-	res := response.Response{
-		Code: code,
-		Msg: response.GetMsg(code),
-	}
-	res.Json(c)
+	response.CodeResponse(c, code)
 }
 
 func UpdateInfo(c *gin.Context) {
 	var blogger service.Blogger
 	err := c.BindJSON(&blogger)
 	if err != nil {
-		res := response.Response{
-			Code: response.INVALID_PARAMS,
-			Msg: response.GetMsg(response.INVALID_PARAMS),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
@@ -152,9 +108,5 @@ func UpdateInfo(c *gin.Context) {
 		}
 	}
 
-	res := response.Response {
-		Code: code,
-		Msg: response.GetMsg(code),
-	}
-	res.Json(c)
+	response.CodeResponse(c, code)
 }

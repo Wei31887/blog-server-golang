@@ -13,33 +13,34 @@ func BlogTypeList(c *gin.Context) {
 	var page utils.Page
 	var err error
 	if err = c.BindJSON(&page); err != nil {
-		response.ResponseWithCode(c, response.INVALID_PARAMS)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
 	var blogType service.BlogType
 	if page.Total, err = blogType.FindTypeCount(); err != nil {
-		response.ResponseWithCode(c, response.ERROR)
+		response.CodeResponse(c, response.ERROR)
 		return	
 	}
 
 	result, err := blogType.FindTypeList(page) 
 	if err != nil {
-		response.ResponseWithCode(c, response.ERROR)
+		response.CodeResponse(c, response.ERROR)
 		return	
 	}
-	response.SuccessWithDataCount(c, result, page.Total)
+
+	res := response.Response{
+		Data: result,
+		Count: page.Total,
+	}
+	res.Json(c)
 }
 
 func BlogTypeSave(c *gin.Context) {
 	var blogType service.BlogType
 	err := c.BindJSON(&blogType)
 	if err != nil {
-		res := response.Response{
-			Code: response.INVALID_PARAMS,
-			Msg: response.GetMsg(response.INVALID_PARAMS),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.BADREQUEST)
 		return	
 	}
 
@@ -54,36 +55,22 @@ func BlogTypeSave(c *gin.Context) {
 		}
 	}
 
-	res := response.Response{
-		Code: code,
-		Msg: response.GetMsg(code),
-	}
-	res.Json(c)
+	response.CodeResponse(c, code)
 }
 
 func BlogTypeOne(c *gin.Context) {
 	var blogType service.BlogType
 	if err := c.BindJSON(&blogType); err != nil {
-		res := response.Response{
-			Code: response.INVALID_PARAMS,
-			Msg: response.GetMsg(response.INVALID_PARAMS),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
 	result, err := blogType.FindTypeIdOne()
 	if err != nil {
-		res := response.Response{
-			Code: response.ERROR,
-			Msg: response.GetMsg(response.ERROR),
-		}
-		res.Json(c)
+		response.CodeResponse(c, response.ERROR)
 		return
 	}
 	res := response.Response{
-		Code: response.SUCCESS,
-		Msg: response.GetMsg(response.SUCCESS),
 		Data: result,
 	}
 	res.Json(c)
@@ -95,24 +82,27 @@ func BlogTypeAll(c *gin.Context) {
 
 	result, err := blogType.FindTypeAll()
 	if err != nil {
-		response.ResponseWithCode(c, response.ERROR)
+		response.CodeResponse(c, response.ERROR)
 		return
 	}
-	response.SuccessWithData(c, result)
+	res := response.Response{
+        Data: result,
+    }
+	res.Json(c)
 }
 
 // BlogTypeDelete : Query to delete the certain blogtype
 func BlogTypeDelete(c *gin.Context) {
 	var blogType service.BlogType
 	if err := c.BindJSON(&blogType); err != nil {
-		response.ResponseWithCode(c, response.INVALID_PARAMS)
+		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
 	err := blogType.Delete()
 	if err != nil {
-		response.ResponseWithCode(c, response.ERROR)
+		response.CodeResponse(c, response.ERROR)
 		return
 	}
-	response.SuccessResponse(c)
+	response.CodeResponse(c, response.SUCCESS)
 }
