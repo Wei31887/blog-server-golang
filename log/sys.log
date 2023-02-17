@@ -1,9 +1,5 @@
-1.6764462263574588e+09	debug	Header token: 	{"jwt token:": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InVzZXIiLCJLZXkiOiI1YzA1MTMyOTdlMWY3MjU1MjdiOWU3MTQzOTU2MTdiZCIsImV4cCI6MTY3NjQ0NzA4MiwiaXNzIjoidXNlciJ9.eq8PN-_4Z7A8bNDRp59SH0BjkCVFW25MmydcmH0ny24"}
-1.676446226358308e+09	info	Request info:	{"status-code": 200, "cost-time": 0.000857792, "client-ip": "::1", "request-method": "POST", "request-uri": "/logout", "protocl": "HTTP/1.1"}
-1.676446229383395e+09	info	Request info:	{"status-code": 200, "cost-time": 0.036443959, "client-ip": "::1", "request-method": "POST", "request-uri": "/login", "protocl": "HTTP/1.1"}
-1.67644624066169e+09	debug	Header token: 	{"jwt token:": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InVzZXIiLCJLZXkiOiIyODU0OWY1MzkzMWIxMzkwZDBkMmEyYmM2YTQ0M2FlNyIsImV4cCI6MTY3NjQ0NzEyOSwiaXNzIjoidXNlciJ9.rlQ3eTkEMiEE0BCjdkywgWIhfdHziwxNczNTaGP7p9s"}
-1.676446240662049e+09	info	Request info:	{"status-code": 200, "cost-time": 0.000354708, "client-ip": "::1", "request-method": "POST", "request-uri": "/logout", "protocl": "HTTP/1.1"}
-1.676446241642998e+09	debug	Header token: 	{"jwt token:": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InVzZXIiLCJLZXkiOiIyODU0OWY1MzkzMWIxMzkwZDBkMmEyYmM2YTQ0M2FlNyIsImV4cCI6MTY3NjQ0NzEyOSwiaXNzIjoidXNlciJ9.rlQ3eTkEMiEE0BCjdkywgWIhfdHziwxNczNTaGP7p9s"}
-1.676446241643269e+09	info	Request info:	{"status-code": 200, "cost-time": 0.0002655, "client-ip": "::1", "request-method": "POST", "request-uri": "/logout", "protocl": "HTTP/1.1"}
-1.676446243816274e+09	debug	Header token: 	{"jwt token:": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InVzZXIiLCJLZXkiOiIyODU0OWY1MzkzMWIxMzkwZDBkMmEyYmM2YTQ0M2FlNyIsImV4cCI6MTY3NjQ0NzEyOSwiaXNzIjoidXNlciJ9.rlQ3eTkEMiEE0BCjdkywgWIhfdHziwxNczNTaGP7p9s"}
-1.6764462438166258e+09	info	Request info:	{"status-code": 200, "cost-time": 0.000346167, "client-ip": "::1", "request-method": "POST", "request-uri": "/logout", "protocl": "HTTP/1.1"}
+1.6766444301258729e+09	info	Request info:	{"status-code": 400, "cost-time": 0.000839916, "client-ip": "::1", "request-method": "POST", "request-uri": "/blog/list", "protocl": "HTTP/1.1"}
+1.676644441448438e+09	info	Request info:	{"status-code": 200, "cost-time": 0.048786375, "client-ip": "::1", "request-method": "POST", "request-uri": "/blog/list", "protocl": "HTTP/1.1"}
+1.676644447047565e+09	info	Request info:	{"status-code": 200, "cost-time": 0.045533333, "client-ip": "::1", "request-method": "POST", "request-uri": "/blog/list", "protocl": "HTTP/1.1"}
+1.676644550900039e+09	info	Request info:	{"status-code": 400, "cost-time": 0.00019575, "client-ip": "::1", "request-method": "POST", "request-uri": "/tag/blog", "protocl": "HTTP/1.1"}
+1.676644601797983e+09	info	Request info:	{"status-code": 200, "cost-time": 0.04517075, "client-ip": "::1", "request-method": "POST", "request-uri": "/tag/blog", "protocl": "HTTP/1.1"}

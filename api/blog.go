@@ -45,10 +45,6 @@ type blogListRequest struct {
 	TypeId int `json:"type_id"`
 	Page int `json:"page"`
 	Size int `json:"size"`
-	Tags []TagID `json:"tags" binding:"dive"`
-}
-type TagID struct {
-	ID int `json:"tag_id"`
 }
 
 // BlogList : request the blog list of one page
@@ -86,8 +82,17 @@ func BlogList(c *gin.Context) {
 	res.Json(c)
 }
 
+type blogListWithTagRequest struct {
+	Page int `json:"page"`
+	Size int `json:"size"`
+	Tags []TagID `json:"tags" binding:"dive"`
+}
+type TagID struct {
+	ID int `json:"tag_id"`
+}
+
 func BlogListWithTag(c *gin.Context) {
-	var requestInfo blogListRequest
+	var requestInfo blogListWithTagRequest
 	if err := c.BindJSON(&requestInfo); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
