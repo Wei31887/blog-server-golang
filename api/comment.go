@@ -1,7 +1,6 @@
 package api
 
 import (
-	G "blog/server/global"
 	"blog/server/model/response"
 	"blog/server/service"
 	"time"
@@ -12,7 +11,7 @@ import (
 // CreateComment : api to create comment
 func CreateComment(c *gin.Context) {
 	var comment service.Comment
-	err := c.BindJSON(&comment)
+	err := c.ShouldBindJSON(&comment)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
@@ -20,7 +19,7 @@ func CreateComment(c *gin.Context) {
 
 	// add ip and time to comment struct
 	comment.Ip = c.ClientIP()
-	comment.AddTime = time.Now().Format(G.DateFormat)
+	comment.AddTime = time.Now()
 
 	err = comment.Create()
 	if err != nil {

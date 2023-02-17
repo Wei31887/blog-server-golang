@@ -1,5 +1,4 @@
-1.6766444301258729e+09	info	Request info:	{"status-code": 400, "cost-time": 0.000839916, "client-ip": "::1", "request-method": "POST", "request-uri": "/blog/list", "protocl": "HTTP/1.1"}
-1.676644441448438e+09	info	Request info:	{"status-code": 200, "cost-time": 0.048786375, "client-ip": "::1", "request-method": "POST", "request-uri": "/blog/list", "protocl": "HTTP/1.1"}
-1.676644447047565e+09	info	Request info:	{"status-code": 200, "cost-time": 0.045533333, "client-ip": "::1", "request-method": "POST", "request-uri": "/blog/list", "protocl": "HTTP/1.1"}
-1.676644550900039e+09	info	Request info:	{"status-code": 400, "cost-time": 0.00019575, "client-ip": "::1", "request-method": "POST", "request-uri": "/tag/blog", "protocl": "HTTP/1.1"}
-1.676644601797983e+09	info	Request info:	{"status-code": 200, "cost-time": 0.04517075, "client-ip": "::1", "request-method": "POST", "request-uri": "/tag/blog", "protocl": "HTTP/1.1"}
+1.6766514007458189e+09	debug	Header token: 	{"jwt token:": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InVzZXIiLCJLZXkiOiJiZDE5MTc4ODJiNzk2MTY1MmJhMzYzNTM4ZTcwNjI2MSIsImV4cCI6MTY3NjY1MDA1MSwiaXNzIjoidXNlciJ9.oCj_v9ic_kv90d7iM4w-mXoU-qn4tBsxS6xYIzjYwqw"}
+1.67665140074593e+09	debug	Header token: 	{"jwt token:": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6InVzZXIiLCJLZXkiOiJiZDE5MTc4ODJiNzk2MTY1MmJhMzYzNTM4ZTcwNjI2MSIsImV4cCI6MTY3NjY1MDA1MSwiaXNzIjoidXNlciJ9.oCj_v9ic_kv90d7iM4w-mXoU-qn4tBsxS6xYIzjYwqw"}
+1.676651400746664e+09	info	Request info:	{"status-code": 512, "cost-time": 0.000864167, "client-ip": "::1", "request-method": "POST", "request-uri": "/admin/blogger/find", "protocl": "HTTP/1.1"}
+1.676651400746806e+09	info	Request info:	{"status-code": 512, "cost-time": 0.000873916, "client-ip": "::1", "request-method": "POST", "request-uri": "/admin/blogger/find", "protocl": "HTTP/1.1"}

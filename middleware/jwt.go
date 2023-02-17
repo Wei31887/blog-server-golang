@@ -4,6 +4,7 @@ import (
 	G "blog/server/global"
 	"blog/server/model/response"
 	"blog/server/utils"
+	"log"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -17,7 +18,7 @@ func JWT() gin.HandlerFunc {
 		// Check the token from header is empty or not
 		if tokenStr == "" {
 			response.CodeResponse(c, response.ERROR_AUTH_CHECK_TOKEN_NOT_FOUND)
-			c.Abort()
+			c.AbortWithStatus(response.ERROR_AUTH_CHECK_TOKEN_NOT_FOUND)
 			return
 		} 
 		
@@ -32,6 +33,7 @@ func JWT() gin.HandlerFunc {
 		// Validate the JWT token and the JWT token is in the black list or not
 		tokenCliam, err := j.ParseToken(tokenStr)
 		if err != nil {
+			log.Println(err.Error())
 			code = response.ERROR_AUTH_CHECK_TOKEN_FAIL
 		} else if j.IsInBlackList(tokenStr) {
 			code = response.ERROR_AUTH_CHECK_TOKEN_IN_BLACK_LIST
@@ -39,7 +41,7 @@ func JWT() gin.HandlerFunc {
 		
 		if code != response.SUCCESS {
 			response.CodeResponse(c, code)
-			c.Abort()
+			c.AbortWithStatus(code)
 			return
 		}
 

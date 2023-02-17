@@ -50,7 +50,7 @@ type blogListRequest struct {
 // BlogList : request the blog list of one page
 func BlogList(c *gin.Context) {
 	var requestInfo blogListRequest
-	if err := c.BindJSON(&requestInfo); err != nil {
+	if err := c.ShouldBindJSON(&requestInfo); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
@@ -93,7 +93,7 @@ type TagID struct {
 
 func BlogListWithTag(c *gin.Context) {
 	var requestInfo blogListWithTagRequest
-	if err := c.BindJSON(&requestInfo); err != nil {
+	if err := c.ShouldBindJSON(&requestInfo); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}

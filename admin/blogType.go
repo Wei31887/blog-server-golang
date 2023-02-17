@@ -12,7 +12,7 @@ import (
 func BlogTypeList(c *gin.Context) {
 	var page utils.Page
 	var err error
-	if err = c.BindJSON(&page); err != nil {
+	if err = c.ShouldBindJSON(&page); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
@@ -38,7 +38,7 @@ func BlogTypeList(c *gin.Context) {
 
 func BlogTypeSave(c *gin.Context) {
 	var blogType service.BlogType
-	err := c.BindJSON(&blogType)
+	err := c.ShouldBindJSON(&blogType)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return	
@@ -60,7 +60,7 @@ func BlogTypeSave(c *gin.Context) {
 
 func BlogTypeOne(c *gin.Context) {
 	var blogType service.BlogType
-	if err := c.BindJSON(&blogType); err != nil {
+	if err := c.ShouldBindJSON(&blogType); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
@@ -94,7 +94,7 @@ func BlogTypeAll(c *gin.Context) {
 // BlogTypeDelete : Query to delete the certain blogtype
 func BlogTypeDelete(c *gin.Context) {
 	var blogType service.BlogType
-	if err := c.BindJSON(&blogType); err != nil {
+	if err := c.ShouldBindJSON(&blogType); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}

@@ -12,7 +12,7 @@ import (
 func CommentList(c *gin.Context) {
 	var page utils.Page
 	var err error
-	if err = c.BindJSON(&page); err != nil {
+	if err = c.ShouldBindJSON(&page); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
@@ -38,7 +38,7 @@ func CommentList(c *gin.Context) {
 // CommentDelete : Query to delete the certain comment
 func CommentDelete(c *gin.Context) {
 	var comment service.Comment
-	if err := c.BindJSON(&comment); err != nil {
+	if err := c.ShouldBindJSON(&comment); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
@@ -53,7 +53,7 @@ func CommentDelete(c *gin.Context) {
 
 func CommentStatus(c *gin.Context) {
 	var comment service.Comment
-	err := c.BindJSON(&comment)
+	err := c.ShouldBindJSON(&comment)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return

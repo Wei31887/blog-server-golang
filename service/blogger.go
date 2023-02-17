@@ -42,7 +42,7 @@ func (b *Blogger) FindByName() (*Blogger, error) {
 }
 
 // Query for updating blogger password
-func (b *Blogger) UpdatePassword() (error) {
+func (b *Blogger) UpdateSecurityInfo() (error) {
 	if b.Password == "" {
 		db := G.GLOBAL_DB.Save(b)
 		if db.Error != nil {

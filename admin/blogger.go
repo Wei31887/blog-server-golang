@@ -66,10 +66,16 @@ func FindBlogger(c *gin.Context) {
 	res.Json(c)
 }
 
+// type updatePasswordRequest struct {
+// 	username string `json:"username", binding:"required,min=1"`
+// 	password string `json:"password", binding:"required,min=6"`
+// 	id int `json:"id", binding:"required"`
+// }
+
 // Update blogger password
 func UpdatePassword(c *gin.Context) {
 	var blogger service.Blogger
-	err := c.BindJSON(&blogger)
+	err := c.ShouldBindJSON(&blogger)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
@@ -81,7 +87,7 @@ func UpdatePassword(c *gin.Context) {
 			code = response.ERROR
 		}
 	} else {
-		if err = blogger.UpdatePassword(); err != nil {
+		if err = blogger.UpdateSecurityInfo(); err != nil {
 			code = response.ERROR
 		}
 	}
@@ -91,7 +97,7 @@ func UpdatePassword(c *gin.Context) {
 
 func UpdateInfo(c *gin.Context) {
 	var blogger service.Blogger
-	err := c.BindJSON(&blogger)
+	err := c.ShouldBindJSON(&blogger)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
