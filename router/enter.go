@@ -7,5 +7,5 @@ import (
 
 var (
 	adminApiGroup = admin.AdminApi{}
-	apiGroup = api.Api{}
+	apiGroup      = api.Api{}
 )

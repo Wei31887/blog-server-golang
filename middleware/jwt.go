@@ -4,7 +4,6 @@ import (
 	G "blog/server/global"
 	"blog/server/model/response"
 	"blog/server/token"
-	"log"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -26,7 +25,6 @@ func JWT() gin.HandlerFunc {
 		logger := G.GLOBAL_LOG
 		logger.Debug("Header token: ", zap.String("jwt token:", tokenStr))
 		
-
 		code := response.SUCCESS
 
 		// JWT authentication
@@ -34,8 +32,7 @@ func JWT() gin.HandlerFunc {
 		// Validate the JWT token and the JWT token is in the black list or not
 		payload, err := maker.VerifyToken(tokenStr)
 		if err != nil {
-			log.Println(err.Error())
-			code = response.ERROR_AUTH_CHECK_TOKEN_FAIL
+			code = response.ERROR_AUTH_CHECK_TOKEN_FAIL 
 		} else if maker.IsInBlackList(tokenStr) {
 			code = response.ERROR_AUTH_CHECK_TOKEN_IN_BLACK_LIST
 		}

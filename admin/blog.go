@@ -1,18 +1,18 @@
 package admin
 
 import (
+	"blog/server/model"
 	"blog/server/model/response"
-	"blog/server/service"
 	"blog/server/utils"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-type AdminBlogApi struct {}
+type AdminBlogApi struct{}
 
 func (*AdminBlogApi) BlogSave(c *gin.Context) {
-	var blog service.Blog
+	blog := &model.Blog{}
 	if err := c.ShouldBindJSON(&blog); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
@@ -21,19 +21,18 @@ func (*AdminBlogApi) BlogSave(c *gin.Context) {
 	code := response.SUCCESS
 	if blog.Id <= 0 {
 		blog.AddTime = time.Now()
-		if err := blog.Create(); err != nil {
+		if err := blogService.Create(blog); err != nil {
 			code = response.ERROR
 		}
 	} else {
 		blog.UpdateTime = time.Now()
-		if err := blog.Update(); err != nil {
+		if err := blogService.Update(blog); err != nil {
 			code = response.ERROR
 		}
 	}
 
 	response.CodeResponse(c, code)
 }
-
 
 func (*AdminBlogApi) BlogList(c *gin.Context) {
 	var page utils.Page
@@ -42,9 +41,9 @@ func (*AdminBlogApi) BlogList(c *gin.Context) {
 		return
 	}
 
-	blog := new(service.Blog)
-	page.Total = int(blog.Count())
-	result, err := blog.FindList(&page) 
+	blog := model.Blog{}
+	page.Total = int(blogService.Count())
+	result, err := blogService.FindList(&blog, &page)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
@@ -56,15 +55,14 @@ func (*AdminBlogApi) BlogList(c *gin.Context) {
 	res.Json(c)
 }
 
-
 func (*AdminBlogApi) BlogFindOne(c *gin.Context) {
-	var blog service.Blog
+	blog := &model.Blog{}
 	if err := c.ShouldBindJSON(&blog); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
-	result, err := blog.FindOne()
+	result, err := blogService.FindOne(blog)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
@@ -77,16 +75,16 @@ func (*AdminBlogApi) BlogFindOne(c *gin.Context) {
 }
 
 func (*AdminBlogApi) BlogDelete(c *gin.Context) {
-	var blog service.Blog
+	blog := &model.Blog{}
 	if err := c.ShouldBindJSON(&blog); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
-	if err := blog.Delete(); err != nil {
+	if err := blogService.Delete(blog); err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
 	}
-	
+
 	response.CodeResponse(c, response.SUCCESS)
 }

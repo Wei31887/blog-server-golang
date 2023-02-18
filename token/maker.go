@@ -6,6 +6,6 @@ type Maker interface {
 	CreateToken(userName string, duration time.Duration) (string, *Payload, error)
 	VerifyToken(token string) (*Payload, error)
 	GetBlackList(token string) string
-	JoinBlackList(token string) (err error)
+	JoinBlackList(token string) error
 	IsInBlackList(token string) bool
 }

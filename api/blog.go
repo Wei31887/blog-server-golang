@@ -1,18 +1,18 @@
 package api
 
 import (
+	"blog/server/model"
 	"blog/server/model/response"
-	"blog/server/service"
 	"blog/server/utils"
 
 	"github.com/gin-gonic/gin"
 )
 
-type BlogApi struct {}
+type BlogApi struct{}
 
 // FindBlog : request the information of blog including comment, next blog, last page
 func (*BlogApi) FindBlog(c *gin.Context) {
-	var blog service.Blog
+	blog := &model.Blog{}
 	err := c.ShouldBindJSON(&blog)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
@@ -20,15 +20,15 @@ func (*BlogApi) FindBlog(c *gin.Context) {
 	}
 
 	// Update the click hit
-	blog.UpdataClick()
+	blogService.UpdataClick(blog)
 	// Query the blog with type name by the given blog id
-	resultBlog, _ := blog.FindBlogWithTypeName()
+	resultBlog, _ := blogService.FindBlogWithTypeName(blog)
 	// Query the previous blog
-	prevBlog, _ := blog.FindPrevBlogWithType()
+	prevBlog, _ := blogService.FindPrevBlogWithType(blog)
 	// // Query the next blog
-	nextBlog, _ := blog.FindNextBlogWithType()
+	nextBlog, _ := blogService.FindNextBlogWithType(blog)
 	// Query the comments of the blog
-	comments, _ := blog.FindBlogComment()
+	comments, _ := blogService.FindBlogComment(blog)
 
 	resMap := make(map[string]interface{})
 	resMap["prev"] = prevBlog
@@ -42,11 +42,10 @@ func (*BlogApi) FindBlog(c *gin.Context) {
 	res.Json(c)
 }
 
-
 type blogListRequest struct {
 	TypeId int `json:"type_id"`
-	Page int `json:"page"`
-	Size int `json:"size"`
+	Page   int `json:"page"`
+	Size   int `json:"size"`
 }
 
 // BlogList : request the blog list of one page
@@ -58,11 +57,11 @@ func (*BlogApi) BlogList(c *gin.Context) {
 	}
 
 	// organize
-	blog := new(service.Blog)
-	pageInfo := &utils.Page{
-		Page: requestInfo.Page,
-		Size: requestInfo.Size,
-		Total: int(blog.Count()),
+	blog := model.Blog{}
+	pageInfo := utils.Page{
+		Page:  requestInfo.Page,
+		Size:  requestInfo.Size,
+		Total: int(blogService.Count()),
 	}
 
 	// get the type id if it exist
@@ -71,22 +70,22 @@ func (*BlogApi) BlogList(c *gin.Context) {
 	}
 
 	// query the blog list
-	results, err := blog.FindList(pageInfo)
+	results, err := blogService.FindList(&blog, &pageInfo)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
 	res := response.Response{
-		Data: results,
+		Data:  results,
 		Count: pageInfo.Total,
 	}
 	res.Json(c)
 }
 
 type blogListWithTagRequest struct {
-	Page int `json:"page"`
-	Size int `json:"size"`
+	Page int     `json:"page"`
+	Size int     `json:"size"`
 	Tags []TagID `json:"tags" binding:"dive"`
 }
 type TagID struct {
@@ -101,25 +100,24 @@ func (*BlogApi) BlogListWithTag(c *gin.Context) {
 	}
 
 	// organize the query info
-	blog := new(service.Blog)
 	tagIdList := make([]int, 0)
 	for _, item := range requestInfo.Tags {
 		tagIdList = append(tagIdList, item.ID)
 	}
 	pageInfo := &utils.Page{
-		Page: requestInfo.Page,
-		Size: requestInfo.Size,
-		Total: int(blog.Count()),
+		Page:  requestInfo.Page,
+		Size:  requestInfo.Size,
+		Total: int(blogService.Count()),
 	}
-	
-	results, err := blog.BlogListWithTag(tagIdList, pageInfo)
+
+	results, err := blogService.BlogListWithTag(tagIdList, pageInfo)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
 	res := response.Response{
-        Data: results,
+		Data: results,
 	}
 	res.Json(c)
 }

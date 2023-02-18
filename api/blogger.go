@@ -6,11 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type BloggerApi struct {}
+type BloggerApi struct{}
 
 // FindBlogger : request the blogger information
 func (*BloggerApi) FindBlogger(c *gin.Context) {
-	result , err := blogService.FindIdFirst()
+	result, err := bloggerService.FindIdFirst()
 	if err != nil {
 		response.MsgResponse(c, response.FORBIDDEN, "blogger is not exist")
 		return

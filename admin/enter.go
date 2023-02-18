@@ -11,8 +11,8 @@ type AdminApi struct {
 }
 
 var (
-	blogService = service.Service.BloggerService
-	blogTypeService    = service.Service.BlogTypeService
-	commentService    = service.Service.CommentService
+	bloggerService  = service.Service.BloggerService
+	blogService     = service.Service.BlogService
+	blogTypeService = service.Service.BlogTypeService
+	commentService  = service.Service.CommentService
 )
-

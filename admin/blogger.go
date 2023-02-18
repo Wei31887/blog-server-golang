@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AdminBloggerApi struct {}
+type AdminBloggerApi struct{}
 
 // Login
 func (*AdminBloggerApi) Login(c *gin.Context) {
@@ -21,7 +21,7 @@ func (*AdminBloggerApi) Login(c *gin.Context) {
 		return
 	}
 
-	resultBlogger, err := blogService.FindByName(blogger)
+	resultBlogger, err := bloggerService.FindByName(blogger)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			response.MsgResponse(c, response.FORBIDDEN, "User not found")
@@ -36,7 +36,7 @@ func (*AdminBloggerApi) Login(c *gin.Context) {
 		return
 	}
 
-	// create JWT token 
+	// create JWT token
 	maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
 	tokenStr, _, err := maker.CreateToken(blogger.Username, G.GLOBAL_CONFIG.JWT.ExpireTime)
 	if err != nil {
@@ -60,9 +60,8 @@ func (*AdminBloggerApi) Logout(c *gin.Context) {
 	response.CodeResponse(c, response.SUCCESS)
 }
 
-//
 func (*AdminBloggerApi) FindBlogger(c *gin.Context) {
-	queryBlogger, err := blogService.FindIdFirst()
+	queryBlogger, err := bloggerService.FindIdFirst()
 	if err != nil {
 		response.MsgResponse(c, response.FORBIDDEN, "User not found")
 		return
@@ -84,11 +83,11 @@ func (*AdminBloggerApi) UpdatePassword(c *gin.Context) {
 
 	code := response.SUCCESS
 	if blogger.Id <= 0 {
-		if err = blogService.Create(blogger); err != nil {
+		if err = bloggerService.Create(blogger); err != nil {
 			code = response.ERROR
 		}
 	} else {
-		if _, err = blogService.UpdateSecurityInfo(blogger); err != nil {
+		if _, err = bloggerService.UpdateSecurityInfo(blogger); err != nil {
 			code = response.ERROR
 		}
 	}
@@ -106,11 +105,11 @@ func (*AdminBloggerApi) UpdateInfo(c *gin.Context) {
 
 	code := response.SUCCESS
 	if blogger.Id <= 0 {
-		if err := blogService.Create(blogger); err != nil {
+		if err := bloggerService.Create(blogger); err != nil {
 			code = response.ERROR
 		}
 	} else {
-		if _, err := blogService.UpdateInfo(blogger); err != nil {
+		if _, err := bloggerService.UpdateInfo(blogger); err != nil {
 			code = response.ERROR
 		}
 	}

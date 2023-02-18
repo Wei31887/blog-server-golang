@@ -12,7 +12,9 @@ type Api struct {
 }
 
 var (
-	blogService = service.Service.BloggerService
+	bloggerService  = service.Service.BloggerService
+	blogService     = service.Service.BlogService
 	blogTypeService = service.Service.BlogTypeService
-	commentService = service.Service.CommentService
+	commentService  = service.Service.CommentService
+	tagService      = service.Service.TagService
 )

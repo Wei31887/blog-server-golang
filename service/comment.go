@@ -7,16 +7,16 @@ import (
 )
 
 // type Comment model.Comment
-type CommentService struct {}
+type CommentService struct{}
 
 // var commentService CommentService
 
 func (*CommentService) FindCommentList(page utils.Page) ([]*model.Comment, error) {
 	commentLists := make([]*model.Comment, 0)
 	err := G.GLOBAL_DB.Model(&model.Comment{}).
-				Limit(page.Size).
-				Offset(page.GetStartPage()).
-				Find(&commentLists).Error
+		Limit(page.Size).
+		Offset(page.GetStartPage()).
+		Find(&commentLists).Error
 	return commentLists, err
 }
 
@@ -29,7 +29,7 @@ func (*CommentService) Count() (int, error) {
 // create comment
 func (*CommentService) Create(comment *model.Comment) error {
 	return G.GLOBAL_DB.Create(comment).Error
-	
+
 }
 
 // update comment

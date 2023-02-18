@@ -8,9 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AdminBlogTypeApi struct {}
+type AdminBlogTypeApi struct{}
 
-//
 func (*AdminBlogTypeApi) BlogTypeList(c *gin.Context) {
 	var page utils.Page
 	var err error
@@ -21,17 +20,17 @@ func (*AdminBlogTypeApi) BlogTypeList(c *gin.Context) {
 
 	if page.Total, err = blogTypeService.FindTypeCount(); err != nil {
 		response.CodeResponse(c, response.ERROR)
-		return	
+		return
 	}
 
-	result, err := blogTypeService.FindTypeList(page) 
+	result, err := blogTypeService.FindTypeList(page)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
-		return	
+		return
 	}
 
 	res := response.Response{
-		Data: result,
+		Data:  result,
 		Count: page.Total,
 	}
 	res.Json(c)
@@ -42,7 +41,7 @@ func (*AdminBlogTypeApi) BlogTypeSave(c *gin.Context) {
 	err := c.ShouldBindJSON(blogType)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
-		return	
+		return
 	}
 
 	code := response.SUCCESS
@@ -77,7 +76,7 @@ func (*AdminBlogTypeApi) BlogTypeOne(c *gin.Context) {
 	res.Json(c)
 }
 
-// BlogTypeAll 
+// BlogTypeAll
 func (*AdminBlogTypeApi) BlogTypeAll(c *gin.Context) {
 	result, err := blogTypeService.FindTypeAll()
 	if err != nil {
@@ -85,8 +84,8 @@ func (*AdminBlogTypeApi) BlogTypeAll(c *gin.Context) {
 		return
 	}
 	res := response.Response{
-        Data: result,
-    }
+		Data: result,
+	}
 	res.Json(c)
 }
 

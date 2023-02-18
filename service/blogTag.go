@@ -8,50 +8,47 @@ import (
 type Tag model.Tag
 type BlogTag model.BlogTag
 
+type TagService struct{}
+type BlogTagService struct{}
+
 /* ---- Tag ---- */
-func (tag *Tag) Create() error {
-	db := G.GLOBAL_DB.Create(tag)
-	return db.Error
+
+func (t *TagService) Create(tag *model.Tag) error {
+	return G.GLOBAL_DB.Create(tag).Error
 }
 
-func (tag *Tag) Update() error {
-	db := G.GLOBAL_DB.Save(tag)
-	return db.Error
+func (t *TagService) Update(tag *model.Tag) error {
+	return G.GLOBAL_DB.Updates(tag).Error
 }
 
-func (tag *Tag) Delete() error {
-	db := G.GLOBAL_DB.Delete(tag)
-	return db.Error
+func (t *TagService) Delete(tag *model.Tag) error {
+	return G.GLOBAL_DB.Delete(tag).Error
 }
 
 // TagList : get the tag list with the count of each tag
-func (tag *Tag) TagList() ([]*Tag, error) {
-	var tagList = make([]*Tag, 0)
-	db := G.GLOBAL_DB.Model(tag).
-					Select("tag.id, tag.tag_name, tag.sort, count(blog_tag.blog_id) as count").
-					Joins("left join blog_tag on tag.id=blog_tag.tag_id").
-					Group("tag.id").
-					Order("tag.id asc").Find(&tagList)
-	if db.Error != nil {
-		return nil, db.Error
-	}
-	return tagList, nil
+func (t *TagService) TagList() ([]*model.Tag, error) {
+	var tagList = make([]*model.Tag, 0)
+	err := G.GLOBAL_DB.Model(&model.Tag{}).
+		Select("tag.id, tag.tag_name, tag.sort, count(blog_tag.blog_id) as count").
+		Joins("left join blog_tag on tag.id=blog_tag.tag_id").
+		Group("tag.id").
+		Order("tag.id asc").
+		Find(&tagList).Error
+	return tagList, err
 }
-
-
 
 /* ---- BlogTag imtermidary table ---- */
-func (bt *BlogTag) Create() error {
-	db := G.GLOBAL_DB.Create(bt)
+func (bt *BlogTagService) Create(blogTag *model.BlogTag) error {
+	db := G.GLOBAL_DB.Create(blogTag)
 	return db.Error
 }
 
-func (bt *BlogTag) Update() error {
-	db := G.GLOBAL_DB.Save(bt)
+func (bt *BlogTagService) Update(blogTag *model.BlogTag) error {
+	db := G.GLOBAL_DB.Save(blogTag)
 	return db.Error
 }
 
-func (bt *BlogTag) Delete() error {
-	db := G.GLOBAL_DB.Delete(bt)
+func (bt *BlogTagService) Delete(blogTag *model.BlogTag) error {
+	db := G.GLOBAL_DB.Delete(blogTag)
 	return db.Error
 }

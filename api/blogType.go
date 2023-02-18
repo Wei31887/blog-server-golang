@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type BlogTypeApi struct {}
+type BlogTypeApi struct{}
 
 // FindType : request the amount of each type
 func (*BlogTypeApi) FindType(c *gin.Context) {
 	result, err := blogTypeService.FindAllTypeCount()
-	
+
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return

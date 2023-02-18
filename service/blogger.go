@@ -5,17 +5,16 @@ import (
 	"blog/server/model"
 )
 
-type BloggerService struct {}
+type BloggerService struct{}
 
 var bloggerService BloggerService
 
-func (b *BloggerService) Create(blogger *model.Blogger) (error) {
+func (b *BloggerService) Create(blogger *model.Blogger) error {
 	return G.GLOBAL_DB.Create(blogger).Error
 }
 
-
 // Query the blogger with id 1
-func (b *BloggerService) FindIdFirst() (*model.Blogger, error){
+func (b *BloggerService) FindIdFirst() (*model.Blogger, error) {
 	result := &model.Blogger{}
 	err := G.GLOBAL_DB.Where("id = 1").First(result).Error
 	return result, err
@@ -33,7 +32,7 @@ func (b *BloggerService) UpdateSecurityInfo(blogger *model.Blogger) (*model.Blog
 	if blogger.Password == "" {
 		err := G.GLOBAL_DB.Save(blogger).Error
 		return blogger, err
-	} 
+	}
 	err := G.GLOBAL_DB.Model(blogger).Update("password", blogger.Password).Error
 	return blogger, err
 }
@@ -43,7 +42,7 @@ func (b *BloggerService) UpdateInfo(blogger *model.Blogger) (*model.Blogger, err
 	if blogger.Password == "" {
 		err := G.GLOBAL_DB.Save(blogger).Error
 		return blogger, err
-	} 
+	}
 	err := G.GLOBAL_DB.Model(blogger).Updates(blogger).Error
 	return blogger, err
 }

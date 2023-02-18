@@ -3,13 +3,12 @@ package api
 import (
 	"blog/server/model"
 	"blog/server/model/response"
-	"blog/server/service"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-type CommentApi struct {}
+type CommentApi struct{}
 
 // CreateComment : api to create comment
 func (*CommentApi) CreateComment(c *gin.Context) {
@@ -31,10 +30,10 @@ func (*CommentApi) CreateComment(c *gin.Context) {
 	}
 
 	// update blog
-	blog := service.Blog{
+	blog := model.Blog{
 		Id: comment.BlogId,
 	}
-	blog.UpdateReplay()
+	blogService.UpdateReplay(&blog)
 
 	response.CodeResponse(c, response.SUCCESS)
 }

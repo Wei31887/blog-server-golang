@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AdminCommentApi struct {}
+type AdminCommentApi struct{}
 
 func (*AdminCommentApi) CommentList(c *gin.Context) {
 	var page utils.Page
@@ -20,16 +20,16 @@ func (*AdminCommentApi) CommentList(c *gin.Context) {
 
 	if page.Total, err = commentService.Count(); err != nil {
 		response.CodeResponse(c, response.ERROR)
-		return	
+		return
 	}
 
-	result, err := commentService.FindCommentList(page) 
+	result, err := commentService.FindCommentList(page)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
-		return	
+		return
 	}
 	res := response.Response{
-		Data: result,
+		Data:  result,
 		Count: page.Total,
 	}
 	res.Json(c)
@@ -62,7 +62,7 @@ func (*AdminCommentApi) CommentStatus(c *gin.Context) {
 	err = commentService.UpdateState(&comment)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
-		return	
+		return
 	}
 	response.CodeResponse(c, response.SUCCESS)
 }

@@ -2,22 +2,20 @@ package api
 
 import (
 	"blog/server/model/response"
-	"blog/server/service"
 
 	"github.com/gin-gonic/gin"
 )
 
-type TagApi struct {}
+type TagApi struct{}
 
 // TagList : get the list of tag
 func (*TagApi) TagList(c *gin.Context) {
-	var tag service.Tag
-	result, err := tag.TagList()
+	result, err := tagService.TagList()
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
 	}
-	
+
 	res := response.Response{
 		Data: result,
 	}

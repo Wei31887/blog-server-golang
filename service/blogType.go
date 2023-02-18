@@ -27,7 +27,7 @@ func (b *BlogTypeService) FindTypeAll() ([]*model.BlogType, error) {
 }
 
 // FindTypeIdOne : returns the blog type by id
-func (b *BlogTypeService) FindTypeIdOne(blogType *model.BlogType) (*model.BlogType, error){
+func (b *BlogTypeService) FindTypeIdOne(blogType *model.BlogType) (*model.BlogType, error) {
 	var result = &model.BlogType{}
 	err := G.GLOBAL_DB.Where("id = ?", blogType.Id).First(result).Error
 	return result, err
@@ -45,12 +45,12 @@ func (b *BlogTypeService) FindAllTypeCount() ([]map[string]interface{}, error) {
 		return nil, err
 	}
 	defer result.Close()
-	
+
 	for result.Next() {
 		var (
-			id int
+			id     int
 			bCount int
-			bName string
+			bName  string
 		)
 		_ = result.Scan(&id, &bCount, &bName)
 
@@ -65,18 +65,16 @@ func (b *BlogTypeService) FindAllTypeCount() ([]map[string]interface{}, error) {
 
 func (b *BlogTypeService) FindTypeCount() (int, error) {
 	var count int64
-	err := G.GLOBAL_DB.Model(&model.BlogType{}).Count(&count).Error 
+	err := G.GLOBAL_DB.Model(&model.BlogType{}).Count(&count).Error
 	return int(count), err
 }
-
-
 
 func (b *BlogTypeService) FindTypeList(page utils.Page) ([]*model.BlogType, error) {
 	blogTypes := make([]*model.BlogType, 0)
 	err := G.GLOBAL_DB.Model(&model.BlogType{}).
-			Limit(page.Size).
-			Offset(page.GetStartPage()).
-			Order("sort asc").
-			Find(&blogTypes).Error
+		Limit(page.Size).
+		Offset(page.GetStartPage()).
+		Order("sort asc").
+		Find(&blogTypes).Error
 	return blogTypes, err
-} 
+}

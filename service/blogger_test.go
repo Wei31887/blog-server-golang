@@ -12,9 +12,9 @@ func CreateBlogger(t *testing.T) *model.Blogger {
 		Username: "testuser",
 		Password: "testpassword",
 		Nickname: "testuser",
-		Sign: "testsign",
-		Profile: "testprofile", 
-		Img: "testimg",
+		Sign:     "testsign",
+		Profile:  "testprofile",
+		Img:      "testimg",
 	}
 	err := bloggerService.Create(blogger1)
 	require.NoError(t, err)
@@ -26,19 +26,19 @@ func TestCreateBlogger(t *testing.T) {
 }
 
 func TestFindIdFirst(t *testing.T) {
-	result, err := Service.FindIdFirst() 
+	result, err := Service.FindIdFirst()
 	require.NoError(t, err)
 	require.Equal(t, result.Id, 1)
 }
 
 func TestFindByName(t *testing.T) {
 	blogger := CreateBlogger(t)
-    result, err := Service.FindByName(blogger) 
-    require.NoError(t, err)
-    require.Equal(t, result.Username, blogger.Username)
-    require.Equal(t, result.Password, blogger.Password)
-    require.Equal(t, result.Nickname, blogger.Nickname)
-    require.Equal(t, result.Sign, blogger.Sign)
-    require.Equal(t, result.Profile, blogger.Profile)
-    require.Equal(t, result.Img, blogger.Img)
+	result, err := Service.FindByName(blogger)
+	require.NoError(t, err)
+	require.Equal(t, result.Username, blogger.Username)
+	require.Equal(t, result.Password, blogger.Password)
+	require.Equal(t, result.Nickname, blogger.Nickname)
+	require.Equal(t, result.Sign, blogger.Sign)
+	require.Equal(t, result.Profile, blogger.Profile)
+	require.Equal(t, result.Img, blogger.Img)
 }
