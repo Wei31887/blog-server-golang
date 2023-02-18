@@ -12,3 +12,8 @@ type Comment struct {
 	AddTime   time.Time `gorm:"add_time" json:"add_time"`
 	BlogTitle string `gorm:"-" json:"blog_title"`
 }
+
+// Gorm 約定 table name
+func (Comment) TableName() string {
+	return "comment"
+}

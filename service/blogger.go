@@ -7,9 +7,10 @@ import (
 
 type BloggerService struct {}
 
-func (b *BloggerService) Create(blogger *model.Blogger) (*model.Blogger, error) {
-	err := G.GLOBAL_DB.Debug().Create(blogger).Error
-	return blogger, err
+var bloggerService BloggerService
+
+func (b *BloggerService) Create(blogger *model.Blogger) (error) {
+	return G.GLOBAL_DB.Create(blogger).Error
 }
 
 
@@ -30,19 +31,19 @@ func (b *BloggerService) FindByName(blogger *model.Blogger) (*model.Blogger, err
 // Query for updating blogger password
 func (b *BloggerService) UpdateSecurityInfo(blogger *model.Blogger) (*model.Blogger, error) {
 	if blogger.Password == "" {
-		err := G.GLOBAL_DB.Save(b).Error
+		err := G.GLOBAL_DB.Save(blogger).Error
 		return blogger, err
 	} 
-	err := G.GLOBAL_DB.Model(b).Update("password", blogger.Password).Error
+	err := G.GLOBAL_DB.Model(blogger).Update("password", blogger.Password).Error
 	return blogger, err
 }
 
 // Query for update blogger information
 func (b *BloggerService) UpdateInfo(blogger *model.Blogger) (*model.Blogger, error) {
 	if blogger.Password == "" {
-		err := G.GLOBAL_DB.Save(b).Error
+		err := G.GLOBAL_DB.Save(blogger).Error
 		return blogger, err
 	} 
-	err := G.GLOBAL_DB.Model(b).Updates(blogger).Error
+	err := G.GLOBAL_DB.Model(blogger).Updates(blogger).Error
 	return blogger, err
 }

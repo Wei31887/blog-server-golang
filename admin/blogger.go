@@ -5,6 +5,7 @@ import (
 	"blog/server/model"
 	"blog/server/model/response"
 	"blog/server/token"
+	"database/sql"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,9 +21,13 @@ func (*AdminBloggerApi) Login(c *gin.Context) {
 		return
 	}
 
-	resultBlogger, _ := blogService.FindByName(blogger)
-	if resultBlogger == nil {
-		response.MsgResponse(c, response.FORBIDDEN, "User not found")
+	resultBlogger, err := blogService.FindByName(blogger)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			response.MsgResponse(c, response.FORBIDDEN, "User not found")
+			return
+		}
+		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
@@ -79,7 +84,7 @@ func (*AdminBloggerApi) UpdatePassword(c *gin.Context) {
 
 	code := response.SUCCESS
 	if blogger.Id <= 0 {
-		if _, err = blogService.Create(blogger); err != nil {
+		if err = blogService.Create(blogger); err != nil {
 			code = response.ERROR
 		}
 	} else {
@@ -101,7 +106,7 @@ func (*AdminBloggerApi) UpdateInfo(c *gin.Context) {
 
 	code := response.SUCCESS
 	if blogger.Id <= 0 {
-		if _, err := blogService.Create(blogger); err != nil {
+		if err := blogService.Create(blogger); err != nil {
 			code = response.ERROR
 		}
 	} else {

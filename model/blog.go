@@ -16,3 +16,7 @@ type Blog struct {
 	TypeName   string `gorm:"->" json:"type_name"`
 }
 
+// Gorm 約定 table name
+func (Blog) TableName() string {
+	return "blog"
+}

@@ -1,8 +1,8 @@
 package admin
 
 import (
+	"blog/server/model"
 	"blog/server/model/response"
-	"blog/server/service"
 	"blog/server/utils"
 
 	"github.com/gin-gonic/gin"
@@ -18,13 +18,12 @@ func (*AdminCommentApi) CommentList(c *gin.Context) {
 		return
 	}
 
-	var comment service.Comment
-	if page.Total, err = comment.Count(); err != nil {
+	if page.Total, err = commentService.Count(); err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return	
 	}
 
-	result, err := comment.FindCommentList(page) 
+	result, err := commentService.FindCommentList(page) 
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return	
@@ -38,13 +37,13 @@ func (*AdminCommentApi) CommentList(c *gin.Context) {
 
 // CommentDelete : Query to delete the certain comment
 func (*AdminCommentApi) CommentDelete(c *gin.Context) {
-	var comment service.Comment
+	comment := model.Comment{}
 	if err := c.ShouldBindJSON(&comment); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
-	err := comment.Delete()
+	err := commentService.Delete(&comment)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
@@ -53,14 +52,14 @@ func (*AdminCommentApi) CommentDelete(c *gin.Context) {
 }
 
 func (*AdminCommentApi) CommentStatus(c *gin.Context) {
-	var comment service.Comment
+	comment := model.Comment{}
 	err := c.ShouldBindJSON(&comment)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
-	err = comment.UpdateState()
+	err = commentService.UpdateState(&comment)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return	

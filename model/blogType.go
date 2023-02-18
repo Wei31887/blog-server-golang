@@ -5,3 +5,8 @@ type BlogType struct {
 	Name string `gorm:"name" json:"name"`
 	Sort int    `gorm:"sort" json:"sort"`
 }
+
+// Gorm 約定 table name
+func (BlogType) TableName() string {
+	return "blog_type"
+}

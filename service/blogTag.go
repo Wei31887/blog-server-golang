@@ -8,14 +8,6 @@ import (
 type Tag model.Tag
 type BlogTag model.BlogTag
 
-// Gorm 約定 table name
-func (Tag) TableName() string {
-	return "tag"
-}
-func (BlogTag) TableName() string {
-	return "blog_tag"
-}
-
 /* ---- Tag ---- */
 func (tag *Tag) Create() error {
 	db := G.GLOBAL_DB.Create(tag)

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"blog/server/model"
 	"blog/server/model/response"
 	"blog/server/service"
 	"time"
@@ -12,7 +13,7 @@ type CommentApi struct {}
 
 // CreateComment : api to create comment
 func (*CommentApi) CreateComment(c *gin.Context) {
-	var comment service.Comment
+	comment := model.Comment{}
 	err := c.ShouldBindJSON(&comment)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
@@ -23,7 +24,7 @@ func (*CommentApi) CreateComment(c *gin.Context) {
 	comment.Ip = c.ClientIP()
 	comment.AddTime = time.Now()
 
-	err = comment.Create()
+	err = commentService.Create(&comment)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return

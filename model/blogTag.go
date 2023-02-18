@@ -12,3 +12,12 @@ type BlogTag struct {
 	BlogId 	int 	`gorm:"blog_name" json:"blog_name"`
 	TagId 	int 	`gorm:"tag_id" json:"tag_id"`
 }
+
+// Gorm 約定 table name
+func (Tag) TableName() string {
+	return "tag"
+}
+
+func (BlogTag) TableName() string {
+	return "blog_tag"
+}

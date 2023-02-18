@@ -16,10 +16,9 @@ func CreateBlogger(t *testing.T) *model.Blogger {
 		Profile: "testprofile", 
 		Img: "testimg",
 	}
-	result, err := Service.Create(blogger1)
+	err := bloggerService.Create(blogger1)
 	require.NoError(t, err)
-	require.NotEmpty(t, result)
-	return result
+	return blogger1
 }
 
 func TestCreateBlogger(t *testing.T) {

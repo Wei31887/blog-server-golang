@@ -116,8 +116,8 @@ func (blog *Blog) UpdateReplay() (error) {
 }
 
 // FindBlogComment : query the comment of the blog
-func (blog *Blog) FindBlogComment() ([]Comment, error) {
-	comments := make([]Comment, 0)
+func (blog *Blog) FindBlogComment() ([]*model.Comment, error) {
+	comments := make([]*model.Comment, 0)
 	db := G.GLOBAL_DB.Table("comment").
 			Where("blog_id = ? and status = 0", blog.Id).
 			Order("add_time desc").

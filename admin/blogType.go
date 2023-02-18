@@ -1,8 +1,8 @@
 package admin
 
 import (
+	"blog/server/model"
 	"blog/server/model/response"
-	"blog/server/service"
 	"blog/server/utils"
 
 	"github.com/gin-gonic/gin"
@@ -19,13 +19,12 @@ func (*AdminBlogTypeApi) BlogTypeList(c *gin.Context) {
 		return
 	}
 
-	var blogType service.BlogType
-	if page.Total, err = blogType.FindTypeCount(); err != nil {
+	if page.Total, err = blogTypeService.FindTypeCount(); err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return	
 	}
 
-	result, err := blogType.FindTypeList(page) 
+	result, err := blogTypeService.FindTypeList(page) 
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return	
@@ -39,8 +38,8 @@ func (*AdminBlogTypeApi) BlogTypeList(c *gin.Context) {
 }
 
 func (*AdminBlogTypeApi) BlogTypeSave(c *gin.Context) {
-	var blogType service.BlogType
-	err := c.ShouldBindJSON(&blogType)
+	blogType := &model.BlogType{}
+	err := c.ShouldBindJSON(blogType)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return	
@@ -48,11 +47,11 @@ func (*AdminBlogTypeApi) BlogTypeSave(c *gin.Context) {
 
 	code := response.SUCCESS
 	if blogType.Id <= 0 {
-		if err := blogType.Create(); err != nil {
+		if err := blogTypeService.Create(blogType); err != nil {
 			code = response.ERROR
 		}
 	} else {
-		if err := blogType.Update(); err != nil {
+		if err := blogTypeService.Update(blogType); err != nil {
 			code = response.ERROR
 		}
 	}
@@ -61,13 +60,13 @@ func (*AdminBlogTypeApi) BlogTypeSave(c *gin.Context) {
 }
 
 func (*AdminBlogTypeApi) BlogTypeOne(c *gin.Context) {
-	var blogType service.BlogType
-	if err := c.ShouldBindJSON(&blogType); err != nil {
+	blogType := &model.BlogType{}
+	if err := c.ShouldBindJSON(blogType); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
-	result, err := blogType.FindTypeIdOne()
+	result, err := blogTypeService.FindTypeIdOne(blogType)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
@@ -80,9 +79,7 @@ func (*AdminBlogTypeApi) BlogTypeOne(c *gin.Context) {
 
 // BlogTypeAll 
 func (*AdminBlogTypeApi) BlogTypeAll(c *gin.Context) {
-	var blogType service.BlogType
-
-	result, err := blogType.FindTypeAll()
+	result, err := blogTypeService.FindTypeAll()
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
@@ -95,13 +92,13 @@ func (*AdminBlogTypeApi) BlogTypeAll(c *gin.Context) {
 
 // BlogTypeDelete : Query to delete the certain blogtype
 func (*AdminBlogTypeApi) BlogTypeDelete(c *gin.Context) {
-	var blogType service.BlogType
+	blogType := &model.BlogType{}
 	if err := c.ShouldBindJSON(&blogType); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
-	err := blogType.Delete()
+	err := blogTypeService.Delete(blogType)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return

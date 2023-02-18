@@ -2,7 +2,6 @@ package api
 
 import (
 	"blog/server/model/response"
-	"blog/server/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,8 +10,7 @@ type BlogTypeApi struct {}
 
 // FindType : request the amount of each type
 func (*BlogTypeApi) FindType(c *gin.Context) {
-	var blogType service.BlogType
-	result, err := blogType.FindAllTypeCount()
+	result, err := blogTypeService.FindAllTypeCount()
 	
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)

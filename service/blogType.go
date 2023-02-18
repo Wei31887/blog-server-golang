@@ -6,47 +6,35 @@ import (
 	"blog/server/utils"
 )
 
-type BlogType model.BlogType
+type BlogTypeService struct{}
 
-// Gorm 約定 table name
-func (BlogType) TableName() string {
-	return "blog_type"
+func (b *BlogTypeService) Create(blogType *model.BlogType) error {
+	return G.GLOBAL_DB.Create(blogType).Error
 }
 
-func (b *BlogType) Create() error {
-	db := G.GLOBAL_DB.Create(b)
-	return db.Error
+func (b *BlogTypeService) Update(blogType *model.BlogType) error {
+	return G.GLOBAL_DB.Save(blogType).Error
 }
 
-func (b *BlogType) Update() error {
-	db := G.GLOBAL_DB.Save(b)
-	return db.Error
+func (b *BlogTypeService) Delete(blogType *model.BlogType) error {
+	return G.GLOBAL_DB.Delete(blogType).Error
 }
 
-func (b *BlogType) Delete() error {
-	db := G.GLOBAL_DB.Delete(b)
-	return db.Error	
+func (b *BlogTypeService) FindTypeAll() ([]*model.BlogType, error) {
+	var blogTypes = make([]*model.BlogType, 0)
+	err := G.GLOBAL_DB.Order("sort asc").Find(&blogTypes).Error
+	return blogTypes, err
 }
 
-func (b *BlogType) FindTypeAll() ([]*BlogType, error) {
-	var blogTypes = make([]*BlogType, 0)
-	if db := G.GLOBAL_DB.Order("sort asc").Find(&blogTypes); db.Error != nil {
-		return nil, db.Error
-	}
-	return blogTypes, nil
-}
-
-func (b *BlogType) FindTypeIdOne() (*BlogType, error){
-	var blogType = new(BlogType)
-	db := G.GLOBAL_DB.Where("id = ?", b.Id).First(&blogType)
-	if db.Error != nil {
-		return nil, db.Error
-	}
-	return blogType, nil
+// FindTypeIdOne : returns the blog type by id
+func (b *BlogTypeService) FindTypeIdOne(blogType *model.BlogType) (*model.BlogType, error){
+	var result = &model.BlogType{}
+	err := G.GLOBAL_DB.Where("id = ?", blogType.Id).First(result).Error
+	return result, err
 }
 
 // FindTypeCount : query the count of different types
-func (b *BlogType) FindAllTypeCount() ([]map[string]interface{}, error) {
+func (b *BlogTypeService) FindAllTypeCount() ([]map[string]interface{}, error) {
 	typeMaps := make([]map[string]interface{}, 0)
 	sql := `select blog_type.id, count(blog.type_id) as b_count, blog_type.name as b_name from blog 
 			left join blog_type on blog.type_id = blog_type.id 
@@ -75,19 +63,20 @@ func (b *BlogType) FindAllTypeCount() ([]map[string]interface{}, error) {
 	return typeMaps, nil
 }
 
-func (b *BlogType) FindTypeCount() (int, error) {
+func (b *BlogTypeService) FindTypeCount() (int, error) {
 	var count int64
-	if db := G.GLOBAL_DB.Model(b).Count(&count); db.Error != nil {
-		return 0, db.Error
-	}
-	return int(count), nil
+	err := G.GLOBAL_DB.Model(&model.BlogType{}).Count(&count).Error 
+	return int(count), err
 }
 
-func (b *BlogType) FindTypeList(page utils.Page) ([]*BlogType, error) {
-	blogTypes := make([]*BlogType, 0)
-	db := G.GLOBAL_DB.Model(b).Limit(page.Size).Offset(page.GetStartPage()).Order("sort asc").Find(&blogTypes)
-	if db.Error != nil {
-		return nil, db.Error
-	}
-	return blogTypes, nil
+
+
+func (b *BlogTypeService) FindTypeList(page utils.Page) ([]*model.BlogType, error) {
+	blogTypes := make([]*model.BlogType, 0)
+	err := G.GLOBAL_DB.Model(&model.BlogType{}).
+			Limit(page.Size).
+			Offset(page.GetStartPage()).
+			Order("sort asc").
+			Find(&blogTypes).Error
+	return blogTypes, err
 } 
