@@ -1,51 +1,54 @@
 package admin
 
 import (
+	G "blog/server/global"
+	"blog/server/model"
 	"blog/server/model/response"
-	"blog/server/service"
-	"blog/server/utils"
+	"blog/server/token"
 
 	"github.com/gin-gonic/gin"
 )
 
+type AdminBloggerApi struct {}
+
 // Login
-func Login(c *gin.Context) {
-	var blogger service.Blogger
-	err := c.BindJSON(&blogger)
+func (*AdminBloggerApi) Login(c *gin.Context) {
+	blogger := &model.Blogger{}
+	err := c.ShouldBindJSON(blogger)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
 	}
 
-	queryBloger, _ := blogger.FindByName()
-	if queryBloger == nil {
+	resultBlogger, _ := blogService.FindByName(blogger)
+	if resultBlogger == nil {
 		response.MsgResponse(c, response.FORBIDDEN, "User not found")
 		return
 	}
 
-	if blogger.Password != queryBloger.Password {
+	if blogger.Password != resultBlogger.Password {
 		response.MsgResponse(c, response.FORBIDDEN, "Wrong password!")
 		return
 	}
 
 	// create JWT token 
-	j := utils.NewJWT()
-	jwtToken, err := j.GenerateToken(blogger.Username)
+	maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
+	tokenStr, _, err := maker.CreateToken(blogger.Username, G.GLOBAL_CONFIG.JWT.ExpireTime)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
 	res := response.Response{
-		Data: jwtToken,
+		Data: tokenStr,
 	}
 	res.Json(c)
 }
 
 // Logout
-func Logout(c *gin.Context) {
-	j := utils.NewJWT()
-	if err := j.JoinBlackList(c.GetHeader("token")); err != nil {
+func (*AdminBloggerApi) Logout(c *gin.Context) {
+	maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
+	if err := maker.JoinBlackList(c.GetHeader("token")); err != nil {
 		response.CodeResponse(c, response.ERROR_AUTH_CHECK_TOKEN_IN_BLACK_LIST)
 		return
 	}
@@ -53,9 +56,8 @@ func Logout(c *gin.Context) {
 }
 
 //
-func FindBlogger(c *gin.Context) {
-	var blogger service.Blogger
-	queryBlogger, err := blogger.FindIdFirst()
+func (*AdminBloggerApi) FindBlogger(c *gin.Context) {
+	queryBlogger, err := blogService.FindIdFirst()
 	if err != nil {
 		response.MsgResponse(c, response.FORBIDDEN, "User not found")
 		return
@@ -66,16 +68,10 @@ func FindBlogger(c *gin.Context) {
 	res.Json(c)
 }
 
-// type updatePasswordRequest struct {
-// 	username string `json:"username", binding:"required,min=1"`
-// 	password string `json:"password", binding:"required,min=6"`
-// 	id int `json:"id", binding:"required"`
-// }
-
 // Update blogger password
-func UpdatePassword(c *gin.Context) {
-	var blogger service.Blogger
-	err := c.ShouldBindJSON(&blogger)
+func (*AdminBloggerApi) UpdatePassword(c *gin.Context) {
+	blogger := &model.Blogger{}
+	err := c.ShouldBindJSON(blogger)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
@@ -83,11 +79,11 @@ func UpdatePassword(c *gin.Context) {
 
 	code := response.SUCCESS
 	if blogger.Id <= 0 {
-		if err = blogger.Create(); err != nil {
+		if _, err = blogService.Create(blogger); err != nil {
 			code = response.ERROR
 		}
 	} else {
-		if err = blogger.UpdateSecurityInfo(); err != nil {
+		if _, err = blogService.UpdateSecurityInfo(blogger); err != nil {
 			code = response.ERROR
 		}
 	}
@@ -95,9 +91,9 @@ func UpdatePassword(c *gin.Context) {
 	response.CodeResponse(c, code)
 }
 
-func UpdateInfo(c *gin.Context) {
-	var blogger service.Blogger
-	err := c.ShouldBindJSON(&blogger)
+func (*AdminBloggerApi) UpdateInfo(c *gin.Context) {
+	blogger := &model.Blogger{}
+	err := c.ShouldBindJSON(blogger)
 	if err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
 		return
@@ -105,11 +101,11 @@ func UpdateInfo(c *gin.Context) {
 
 	code := response.SUCCESS
 	if blogger.Id <= 0 {
-		if err := blogger.Create(); err != nil {
+		if _, err := blogService.Create(blogger); err != nil {
 			code = response.ERROR
 		}
 	} else {
-		if err := blogger.UpdateInfo(); err != nil {
+		if _, err := blogService.UpdateInfo(blogger); err != nil {
 			code = response.ERROR
 		}
 	}

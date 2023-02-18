@@ -15,3 +15,4 @@ type Blog struct {
 	UpdateTime time.Time `gorm:"update_time" json:"update_time"`
 	TypeName   string `gorm:"->" json:"type_name"`
 }
+

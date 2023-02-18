@@ -9,3 +9,8 @@ type Blogger struct {
 	Profile  string `gorm:"profile" json:"profile"`   //
 	Img      string `gorm:"img" json:"img"`           //
 }
+
+// Gorm 約定 table name
+func (Blogger) TableName() string {
+	return "blogger"
+}

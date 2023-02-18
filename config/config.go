@@ -1,5 +1,7 @@
 package config
 
+import "time"
+
 type Config struct {
 	Server Server	`yaml:"server"`
 	Db Db			`yaml:"db"`
@@ -43,7 +45,7 @@ type Redis struct {
 
 type JWT struct {
 	SigningKey 	string	`mapstructure:"signing-key" yaml:"signing-key"`
-	ExpireTime 	string	`mapstructure:"expires-time" yaml:"expires-time"`
+	ExpireTime 	time.Duration	`mapstructure:"expires-time" yaml:"expires-time"`
 	Issuer 		string 	`mapstructure:"issuer" yaml:"issuer"`
 	JwtBlacklistGracePeriod int64 	`mapstructure:"jwt_blacklist_grace_period" yaml:"jwt_blacklist_grace_period"`
 }

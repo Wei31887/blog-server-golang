@@ -1,13 +1,14 @@
 package service
 
 import (
+	"blog/server/model"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
 
-func CreateBlogger(t *testing.T) *Blogger {
-	blogger1 := &Blogger{
+func CreateBlogger(t *testing.T) *model.Blogger {
+	blogger1 := &model.Blogger{
 		Username: "testuser",
 		Password: "testpassword",
 		Nickname: "testuser",
@@ -15,9 +16,10 @@ func CreateBlogger(t *testing.T) *Blogger {
 		Profile: "testprofile", 
 		Img: "testimg",
 	}
-	err := blogger1.Create()
+	result, err := Service.Create(blogger1)
 	require.NoError(t, err)
-	return blogger1
+	require.NotEmpty(t, result)
+	return result
 }
 
 func TestCreateBlogger(t *testing.T) {
@@ -25,15 +27,14 @@ func TestCreateBlogger(t *testing.T) {
 }
 
 func TestFindIdFirst(t *testing.T) {
-	var blogger *Blogger
-	result, err := blogger.FindIdFirst() 
+	result, err := Service.FindIdFirst() 
 	require.NoError(t, err)
 	require.Equal(t, result.Id, 1)
 }
 
 func TestFindByName(t *testing.T) {
 	blogger := CreateBlogger(t)
-    result, err := blogger.FindByName() 
+    result, err := Service.FindByName(blogger) 
     require.NoError(t, err)
     require.Equal(t, result.Username, blogger.Username)
     require.Equal(t, result.Password, blogger.Password)

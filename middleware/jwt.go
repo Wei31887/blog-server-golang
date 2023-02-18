@@ -3,7 +3,7 @@ package middleware
 import (
 	G "blog/server/global"
 	"blog/server/model/response"
-	"blog/server/utils"
+	"blog/server/token"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -27,15 +27,16 @@ func JWT() gin.HandlerFunc {
 		logger.Debug("Header token: ", zap.String("jwt token:", tokenStr))
 		
 
-		// JWT authentication
-		j := utils.NewJWT()
 		code := response.SUCCESS
+
+		// JWT authentication
+		maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
 		// Validate the JWT token and the JWT token is in the black list or not
-		tokenCliam, err := j.ParseToken(tokenStr)
+		payload, err := maker.VerifyToken(tokenStr)
 		if err != nil {
 			log.Println(err.Error())
 			code = response.ERROR_AUTH_CHECK_TOKEN_FAIL
-		} else if j.IsInBlackList(tokenStr) {
+		} else if maker.IsInBlackList(tokenStr) {
 			code = response.ERROR_AUTH_CHECK_TOKEN_IN_BLACK_LIST
 		}
 		
@@ -45,7 +46,7 @@ func JWT() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("token", tokenCliam)
+		c.Set("token", payload)
 		c.Next()
 	}	
 }

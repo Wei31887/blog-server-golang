@@ -8,8 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type AdminCommentApi struct {}
 
-func CommentList(c *gin.Context) {
+func (*AdminCommentApi) CommentList(c *gin.Context) {
 	var page utils.Page
 	var err error
 	if err = c.ShouldBindJSON(&page); err != nil {
@@ -36,7 +37,7 @@ func CommentList(c *gin.Context) {
 }
 
 // CommentDelete : Query to delete the certain comment
-func CommentDelete(c *gin.Context) {
+func (*AdminCommentApi) CommentDelete(c *gin.Context) {
 	var comment service.Comment
 	if err := c.ShouldBindJSON(&comment); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
@@ -51,7 +52,7 @@ func CommentDelete(c *gin.Context) {
 	response.CodeResponse(c, response.SUCCESS)
 }
 
-func CommentStatus(c *gin.Context) {
+func (*AdminCommentApi) CommentStatus(c *gin.Context) {
 	var comment service.Comment
 	err := c.ShouldBindJSON(&comment)
 	if err != nil {

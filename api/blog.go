@@ -8,8 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type BlogApi struct {}
+
 // FindBlog : request the information of blog including comment, next blog, last page
-func FindBlog(c *gin.Context) {
+func (*BlogApi) FindBlog(c *gin.Context) {
 	var blog service.Blog
 	err := c.ShouldBindJSON(&blog)
 	if err != nil {
@@ -48,7 +50,7 @@ type blogListRequest struct {
 }
 
 // BlogList : request the blog list of one page
-func BlogList(c *gin.Context) {
+func (*BlogApi) BlogList(c *gin.Context) {
 	var requestInfo blogListRequest
 	if err := c.ShouldBindJSON(&requestInfo); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
@@ -91,7 +93,7 @@ type TagID struct {
 	ID int `json:"tag_id"`
 }
 
-func BlogListWithTag(c *gin.Context) {
+func (*BlogApi) BlogListWithTag(c *gin.Context) {
 	var requestInfo blogListWithTagRequest
 	if err := c.ShouldBindJSON(&requestInfo); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)

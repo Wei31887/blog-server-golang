@@ -9,7 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func BlogSave(c *gin.Context) {
+type AdminBlogApi struct {}
+
+func (*AdminBlogApi) BlogSave(c *gin.Context) {
 	var blog service.Blog
 	if err := c.ShouldBindJSON(&blog); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
@@ -33,7 +35,7 @@ func BlogSave(c *gin.Context) {
 }
 
 
-func BlogList(c *gin.Context) {
+func (*AdminBlogApi) BlogList(c *gin.Context) {
 	var page utils.Page
 	if err := c.ShouldBindJSON(&page); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
@@ -55,7 +57,7 @@ func BlogList(c *gin.Context) {
 }
 
 
-func BlogFindOne(c *gin.Context) {
+func (*AdminBlogApi) BlogFindOne(c *gin.Context) {
 	var blog service.Blog
 	if err := c.ShouldBindJSON(&blog); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
@@ -74,7 +76,7 @@ func BlogFindOne(c *gin.Context) {
 	res.Json(c)
 }
 
-func BlogDelete(c *gin.Context) {
+func (*AdminBlogApi) BlogDelete(c *gin.Context) {
 	var blog service.Blog
 	if err := c.ShouldBindJSON(&blog); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)

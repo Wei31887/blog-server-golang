@@ -7,8 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type TagApi struct {}
+
 // TagList : get the list of tag
-func TagList(c *gin.Context) {
+func (*TagApi) TagList(c *gin.Context) {
 	var tag service.Tag
 	result, err := tag.TagList()
 	if err != nil {

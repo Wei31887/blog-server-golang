@@ -2,15 +2,15 @@ package api
 
 import (
 	"blog/server/model/response"
-	"blog/server/service"
 
 	"github.com/gin-gonic/gin"
 )
 
+type BloggerApi struct {}
+
 // FindBlogger : request the blogger information
-func FindBlogger(c *gin.Context) {
-	var blogger service.Blogger
-	result , err := blogger.FindIdFirst()
+func (*BloggerApi) FindBlogger(c *gin.Context) {
+	result , err := blogService.FindIdFirst()
 	if err != nil {
 		response.MsgResponse(c, response.FORBIDDEN, "blogger is not exist")
 		return

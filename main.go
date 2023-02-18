@@ -15,8 +15,10 @@ import (
 
 func main() {
 	/*  initialize  */
-	configPath := "."
-	initialize.Config(configPath)
+	err := initialize.Config(".")
+	if err != nil {
+		log.Fatal("Cannot initialize config file", err)
+	}
 	G.GLOBAL_LOG = initialize.Logger()
 	G.GLOBAL_REDIS = initialize.Redis()
 	G.GLOBAL_DB = initialize.DataBase()

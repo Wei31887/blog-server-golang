@@ -8,8 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type CommentApi struct {}
+
 // CreateComment : api to create comment
-func CreateComment(c *gin.Context) {
+func (*CommentApi) CreateComment(c *gin.Context) {
 	var comment service.Comment
 	err := c.ShouldBindJSON(&comment)
 	if err != nil {

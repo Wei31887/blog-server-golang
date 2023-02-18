@@ -8,8 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type AdminBlogTypeApi struct {}
+
 //
-func BlogTypeList(c *gin.Context) {
+func (*AdminBlogTypeApi) BlogTypeList(c *gin.Context) {
 	var page utils.Page
 	var err error
 	if err = c.ShouldBindJSON(&page); err != nil {
@@ -36,7 +38,7 @@ func BlogTypeList(c *gin.Context) {
 	res.Json(c)
 }
 
-func BlogTypeSave(c *gin.Context) {
+func (*AdminBlogTypeApi) BlogTypeSave(c *gin.Context) {
 	var blogType service.BlogType
 	err := c.ShouldBindJSON(&blogType)
 	if err != nil {
@@ -58,7 +60,7 @@ func BlogTypeSave(c *gin.Context) {
 	response.CodeResponse(c, code)
 }
 
-func BlogTypeOne(c *gin.Context) {
+func (*AdminBlogTypeApi) BlogTypeOne(c *gin.Context) {
 	var blogType service.BlogType
 	if err := c.ShouldBindJSON(&blogType); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
@@ -77,7 +79,7 @@ func BlogTypeOne(c *gin.Context) {
 }
 
 // BlogTypeAll 
-func BlogTypeAll(c *gin.Context) {
+func (*AdminBlogTypeApi) BlogTypeAll(c *gin.Context) {
 	var blogType service.BlogType
 
 	result, err := blogType.FindTypeAll()
@@ -92,7 +94,7 @@ func BlogTypeAll(c *gin.Context) {
 }
 
 // BlogTypeDelete : Query to delete the certain blogtype
-func BlogTypeDelete(c *gin.Context) {
+func (*AdminBlogTypeApi) BlogTypeDelete(c *gin.Context) {
 	var blogType service.BlogType
 	if err := c.ShouldBindJSON(&blogType); err != nil {
 		response.CodeResponse(c, response.BADREQUEST)
