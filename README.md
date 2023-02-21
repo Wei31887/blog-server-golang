@@ -23,6 +23,7 @@
 4. [gorm.io/gorm](https://gorm.io) 實現存取資料庫
 5. [viper](https://github.com/spf13/viper) 實現 config 初始化
 6. [uber-go/zap](https://github.com/uber-go/zap) zap實現日誌log管理
+7. [go-redis] 使用 Redis 實現 JWT 登出後 token 失效功能
 
 ## 環境
 
