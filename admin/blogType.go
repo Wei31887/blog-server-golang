@@ -36,6 +36,7 @@ func (*AdminBlogTypeApi) BlogTypeList(c *gin.Context) {
 	res.Json(c)
 }
 
+// BlogTypeSave
 func (*AdminBlogTypeApi) BlogTypeSave(c *gin.Context) {
 	blogType := &model.BlogType{}
 	err := c.ShouldBindJSON(blogType)
@@ -44,6 +45,7 @@ func (*AdminBlogTypeApi) BlogTypeSave(c *gin.Context) {
 		return
 	}
 
+	// TODO: add create tag function
 	code := response.SUCCESS
 	if blogType.Id <= 0 {
 		if err := blogTypeService.Create(blogType); err != nil {

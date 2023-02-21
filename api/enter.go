@@ -17,4 +17,5 @@ var (
 	blogTypeService = service.Service.BlogTypeService
 	commentService  = service.Service.CommentService
 	tagService      = service.Service.TagService
+	blogTagService  = service.Service.BlogTagService
 )

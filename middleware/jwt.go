@@ -4,6 +4,7 @@ import (
 	G "blog/server/global"
 	"blog/server/model/response"
 	"blog/server/token"
+	"errors"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -15,9 +16,9 @@ func JWT() gin.HandlerFunc {
 		tokenStr := c.GetHeader("token")
 
 		// Check the token from header is empty or not
-		if tokenStr == "" {
-			response.CodeResponse(c, response.ERROR_AUTH_CHECK_TOKEN_NOT_FOUND)
-			c.AbortWithStatus(response.ERROR_AUTH_CHECK_TOKEN_NOT_FOUND)
+		if len(tokenStr) == 0 {
+			err := errors.New("token is empty")
+			c.AbortWithStatusJSON(response.ERROR_AUTH_CHECK_TOKEN_NOT_FOUND, response.ErrResponseJson(err))
 			return
 		} 
 		

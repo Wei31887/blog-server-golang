@@ -29,6 +29,6 @@ redis:
 
 jwt:
   signing-key: mysecret
-  expires-time: 15m
+  expires-time: 3h
   issuer: user
   jwt_blacklist_grace_period: 10

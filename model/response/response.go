@@ -29,3 +29,10 @@ func CodeResponse(c *gin.Context, code int) {
 		"msg": GetMsg(code),
 	})
 }
+
+// ErrorResponse
+func ErrResponseJson(err error) gin.H {
+    return gin.H{
+		"err": err.Error(),
+	}
+}

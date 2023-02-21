@@ -10,7 +10,7 @@ type TagApi struct{}
 
 // TagList : get the list of tag
 func (*TagApi) TagList(c *gin.Context) {
-	result, err := tagService.TagList()
+	result, err := tagService.ListAll()
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return

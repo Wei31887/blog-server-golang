@@ -15,7 +15,7 @@ func (*BlogService) Create(blog *model.Blog) error {
 }
 
 func (*BlogService) Update(blog *model.Blog) error {
-	return G.GLOBAL_DB.Updates(blog).Error
+	return G.GLOBAL_DB.Where("id = ?", blog.Id).Updates(blog).Error
 }
 
 func (*BlogService) Delete(blog *model.Blog) error {
@@ -35,6 +35,9 @@ func (*BlogService) FindNextBlogWithType(blog *model.Blog) (*model.Blog, error) 
 		Select("blog.id, blog.title, blog.type_id").
 		Where("id > ?", blog.Id).
 		First(resBlog).Error
+	if err != nil {
+		return nil, err
+	}
 	return resBlog, err
 }
 
@@ -46,6 +49,9 @@ func (*BlogService) FindPrevBlogWithType(blog *model.Blog) (*model.Blog, error) 
 		Where("id < ?", blog.Id).
 		Order("id desc").
 		First(resBlog).Error
+	if err != nil {
+		return nil, err
+	}
 	return resBlog, err
 }
 
@@ -65,7 +71,7 @@ func (*BlogService) FindBlogWithTypeName(blog *model.Blog) (*model.Blog, error) 
 func (*BlogService) FindList(blog *model.Blog, page *utils.Page) ([]*model.Blog, error) {
 	blogList := make([]*model.Blog, 0)
 	curDB := G.GLOBAL_DB.Table("blog").
-		Select("blog.id, title, type_id, add_time, update_time, click_hit, blog_type.name as type_name").
+		Select("blog.id, title, type_id, add_time, update_time, summary, click_hit, blog_type.name as type_name").
 		Joins("left join blog_type on blog.type_id = blog_type.id")
 
 	if blog.TypeId > 0 {
@@ -96,6 +102,7 @@ func (*BlogService) Count() (count int64) {
 
 func (*BlogService) UpdataClick(blog *model.Blog) error {
 	err := G.GLOBAL_DB.Model(blog).
+		Where("id = ?", blog.Id).
 		Update("click_hit", gorm.Expr("click_hit + 1")).Error
 	return err
 }
@@ -119,6 +126,26 @@ func (*BlogService) FindBlogComment(blog *model.Blog) ([]*model.Comment, error) 
 
 // BlogListWithTag
 func (*BlogService) BlogListWithTag(tagIdList []int, page *utils.Page) ([]*model.Blog, error) {
+	blogList := make([]*model.Blog, 0)
+	db := G.GLOBAL_DB.Model(&model.Blog{}).
+		Select("blog.id, title, type_id, add_time, update_time, click_hit, summary, blog_type.name as type_name, BLOG_TAG.TAG_ID AS TAG_ID").
+		Joins("INNER JOIN BLOG_TAG ON BLOG.ID = BLOG_TAG.BLOG_ID").
+		Joins("LEFT JOIN blog_type on BLOG.type_id = blog_type.id")
+
+	for _, tag := range tagIdList {
+		db = db.Where("tag_id = ?", tag)
+	}
+
+	err := db.Limit(page.Size).
+		Offset(page.GetStartPage()).
+		Order("BLOG.ID ASC").
+		Find(&blogList).Error
+	return blogList, err
+}
+
+
+// BlogListAndTag
+func (*BlogService) BlogListAndTag(tagIdList []int, page *utils.Page) ([]*model.Blog, error) {
 	blogList := make([]*model.Blog, 0)
 	db := G.GLOBAL_DB.Model(&model.Blog{}).
 		Select("blog.id, title, type_id, add_time, update_time, click_hit, blog_type.name as type_name, BLOG_TAG.TAG_ID AS TAG_ID").

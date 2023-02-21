@@ -21,19 +21,26 @@ func (*BlogApi) FindBlog(c *gin.Context) {
 
 	// Update the click hit
 	blogService.UpdataClick(blog)
-	// Query the blog with type name by the given blog id
-	resultBlog, _ := blogService.FindBlogWithTypeName(blog)
-	// Query the previous blog
+
+	resultBlog, _ := blogService.FindOne(blog)
+
 	prevBlog, _ := blogService.FindPrevBlogWithType(blog)
-	// // Query the next blog
+
 	nextBlog, _ := blogService.FindNextBlogWithType(blog)
-	// Query the comments of the blog
+	
 	comments, _ := blogService.FindBlogComment(blog)
+
+	tags, _ := blogTagService.FindBlogTag(blog.Id)
+	// if err != sql.ErrNoRows {
+	// 	response.CodeResponse(c, response.ERROR)
+    //     return
+	// }
 
 	resMap := make(map[string]interface{})
 	resMap["prev"] = prevBlog
 	resMap["next"] = nextBlog
 	resMap["blog"] = resultBlog
+	resMap["tags"] = tags
 	resMap["comments"] = comments
 
 	res := response.Response{

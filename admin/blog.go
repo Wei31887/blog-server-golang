@@ -4,6 +4,7 @@ import (
 	"blog/server/model"
 	"blog/server/model/response"
 	"blog/server/utils"
+	"database/sql"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -24,10 +25,28 @@ func (*AdminBlogApi) BlogSave(c *gin.Context) {
 		if err := blogService.Create(blog); err != nil {
 			code = response.ERROR
 		}
+		for _, tag := range blog.Tags {
+			blogTag := &model.BlogTag{ 
+				BlogId: blog.Id,
+				TagId:  tag.Id,
+			}
+			if err := blogTagService.Create(blogTag); err != nil {
+				code = response.ERROR
+			}
+		}
 	} else {
 		blog.UpdateTime = time.Now()
 		if err := blogService.Update(blog); err != nil {
 			code = response.ERROR
+		}
+		for _, tag := range blog.Tags {
+			blogTag := &model.BlogTag{ 
+				BlogId: blog.Id,
+				TagId:  tag.Id,
+			}
+			if err := blogTagService.Update(blogTag); err != nil {
+				code = response.ERROR
+			}
 		}
 	}
 
@@ -48,12 +67,13 @@ func (*AdminBlogApi) BlogList(c *gin.Context) {
 		response.CodeResponse(c, response.ERROR)
 		return
 	}
-
 	res := response.Response{
 		Data: result,
 	}
 	res.Json(c)
 }
+
+
 
 func (*AdminBlogApi) BlogFindOne(c *gin.Context) {
 	blog := &model.Blog{}
@@ -62,14 +82,25 @@ func (*AdminBlogApi) BlogFindOne(c *gin.Context) {
 		return
 	}
 
-	result, err := blogService.FindOne(blog)
+	resBlog, err := blogService.FindOne(blog)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			response.CodeResponse(c, response.NOTFOUND)	
+		}
+		response.CodeResponse(c, response.ERROR)
+		return
+	}
+
+	resTag, err := blogTagService.OneBlogTag(resBlog.Id)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
+	resBlog.Tags = resTag
+
 	res := response.Response{
-		Data: result,
+		Data: resBlog,
 	}
 	res.Json(c)
 }

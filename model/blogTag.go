@@ -9,7 +9,7 @@ type Tag struct {
 
 type BlogTag struct {
 	Id     int `gorm:"id" json:"id"`
-	BlogId int `gorm:"blog_name" json:"blog_name"`
+	BlogId int `gorm:"blog_id" json:"blog_id"`
 	TagId  int `gorm:"tag_id" json:"tag_id"`
 }
 

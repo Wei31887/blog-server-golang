@@ -48,6 +48,8 @@ CREATE TABLE "blog_tag" (
   "tag_id" bigint NOT NULL
 );
 
+CREATE UNIQUE INDEX ON "blog_tag" ("blog_id", "tag_id");
+
 ALTER TABLE "blog" ADD FOREIGN KEY ("type_id") REFERENCES "blog_type" ("id");
 
 ALTER TABLE "comment" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id");
@@ -55,3 +57,5 @@ ALTER TABLE "comment" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id");
 ALTER TABLE "blog_tag" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id");
 
 ALTER TABLE "blog_tag" ADD FOREIGN KEY ("tag_id") REFERENCES "tag" ("id");
+
+ALTER TABLE IF EXISTS "blog_tag" DROP CONSTRAINT IF EXISTS "blog_tag_pkey";
