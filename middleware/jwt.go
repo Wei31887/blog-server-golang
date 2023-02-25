@@ -10,6 +10,10 @@ import (
 	"go.uber.org/zap"
 )
 
+var (
+	AuthorizationKey = "token"
+)
+
 // JWT : middleware function, validation layer between request and response
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -34,7 +38,7 @@ func JWT() gin.HandlerFunc {
 		payload, err := maker.VerifyToken(tokenStr)
 		if err != nil {
 			code = response.ERROR_AUTH_CHECK_TOKEN_FAIL 
-		} else if maker.IsInBlackList(tokenStr) {
+		} else if maker.IsInBlackList(payload) {
 			code = response.ERROR_AUTH_CHECK_TOKEN_IN_BLACK_LIST
 		}
 		
@@ -44,7 +48,7 @@ func JWT() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("token", payload)
+		c.Set(AuthorizationKey, payload)
 		c.Next()
 	}	
 }

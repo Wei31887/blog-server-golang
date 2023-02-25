@@ -28,7 +28,8 @@ redis:
   password:
 
 jwt:
-  signing-key: mysecret
-  expires-time: 3h
   issuer: user
-  jwt_blacklist_grace_period: 10
+  signing-key: mysecret
+  access-token-duration: 3h
+  refresh-token-duration: 24h
+  blacklist_grace_period: 10m

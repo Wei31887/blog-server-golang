@@ -35,12 +35,11 @@ func ApiGroupfrontEndRegister(router *gin.Engine) {
 
 func ApiGroupAdminRegister(router *gin.Engine) {
 	router.POST("/login", adminApiGroup.Login)
-
-	// authRouter := router.Group("", middleware.JWT())
-	router.POST("/logout", adminApiGroup.Logout)
+	router.POST("/token/refresh", adminApiGroup.RefreshToken)
 
 	jwt := router.Group("/admin", middleware.JWT())
 	{	
+		jwt.POST("/logout", adminApiGroup.Logout)
 		// blogger
 		jwt.POST("/blogger/find", adminApiGroup.FindBlogger)
 		jwt.POST("/blogger/updatePassword", adminApiGroup.UpdatePassword)
