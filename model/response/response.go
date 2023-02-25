@@ -1,6 +1,8 @@
 package response
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,14 +18,19 @@ func (res *Response) Json(c *gin.Context) {
 }
  
 
-// errResponse
+// ObjResponse
+func ObjResponse(c *gin.Context, obj interface{}) {
+	c.JSON(http.StatusOK, obj)
+}
+
+// MsgResponse
 func MsgResponse(c *gin.Context, code int, msg string) {
 	c.JSON(code, gin.H {
 		"msg": msg,
 	})
 }
 
-// MsgResponse
+// CodeResponse
 func CodeResponse(c *gin.Context, code int) {
 	c.JSON(code, gin.H {
 		"msg": GetMsg(code),

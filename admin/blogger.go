@@ -2,15 +2,26 @@ package admin
 
 import (
 	G "blog/server/global"
+	"blog/server/middleware"
 	"blog/server/model"
 	"blog/server/model/response"
 	"blog/server/token"
 	"database/sql"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type AdminBloggerApi struct{}
+
+type loginResponse struct {
+	SessionId        uuid.UUID `json:"session_id"`
+	AccessToken      string    `json:"access_token"`
+	AccessExpiredAt  time.Time `json:"access_expired_at"`
+	RefreshToken     string    `json:"refresh_token"`
+	RefreshExpiredAt time.Time `json:"refresh_expired_at"`
+}
 
 // Login
 func (*AdminBloggerApi) Login(c *gin.Context) {
@@ -36,27 +47,63 @@ func (*AdminBloggerApi) Login(c *gin.Context) {
 		return
 	}
 
-	// create JWT token
+	// create access JWT token
 	maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
-	tokenStr, _, err := maker.CreateToken(blogger.Username, G.GLOBAL_CONFIG.JWT.ExpireTime)
+	accessToken, accessPayload, err := maker.CreateToken(blogger.Username, G.GLOBAL_CONFIG.JWT.AccessTokenDuration)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
-	res := response.Response{
-		Data: tokenStr,
+	// create refresh JWT token
+	refreshToken, refreshPayload, err := maker.CreateToken(blogger.Username, G.GLOBAL_CONFIG.JWT.RefreshTokenDuration)
+	if err != nil {
+		response.CodeResponse(c, response.ERROR)
+		return
 	}
-	res.Json(c)
+
+	// store refresh token to session
+	session := model.Session{
+		Id:           refreshPayload.Id,
+		Username:     blogger.Username,
+		ClientIp:     c.ClientIP(),
+		UserAgent:    c.Request.UserAgent(),
+		RefreshToken: refreshToken,
+		ExpiresAt:    refreshPayload.ExpiresAt,
+		CreatedAt:    time.Now(),
+	}
+	err = sessionService.Create(&session)
+	if err!= nil {
+        response.CodeResponse(c, response.ERROR)
+        return
+    }
+
+	// send token to client
+	res := loginResponse{
+		SessionId:        session.Id,
+		AccessToken:      accessToken,
+		AccessExpiredAt:  accessPayload.ExpiresAt,
+		RefreshToken:     refreshToken,
+		RefreshExpiredAt: refreshPayload.ExpiresAt,
+	}
+	response.ObjResponse(c, res)
 }
 
 // Logout
 func (*AdminBloggerApi) Logout(c *gin.Context) {
 	maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
-	if err := maker.JoinBlackList(c.GetHeader("token")); err != nil {
+	payload := c.MustGet(middleware.AuthorizationKey).(*token.Payload)
+
+	if valid := maker.IsInBlackList(payload); valid {
 		response.CodeResponse(c, response.ERROR_AUTH_CHECK_TOKEN_IN_BLACK_LIST)
 		return
 	}
+
+	if err := maker.JoinBlackList(payload); err != nil {
+		response.CodeResponse(c, response.ERROR)
+		return
+	}
+
 	response.CodeResponse(c, response.SUCCESS)
 }
 

@@ -2,8 +2,8 @@ package token
 
 import (
 	"errors"
+	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 )
 
@@ -13,8 +13,15 @@ var (
 )
 
 type Payload struct {
-	Id       uuid.UUID `json:"id"`
-	Username string
-	Key      string
-	jwt.StandardClaims
+	Id        uuid.UUID `json:"id"`
+	Username  string
+	ExpiresAt time.Time `json:"expires_at"`
+	IssuedAt  time.Time `json:"issued_at"`
+}
+
+func (p *Payload) Valid() error {
+	if p.ExpiresAt.Before(time.Now()) {
+		return ErrExpiredToken
+	}
+	return nil
 }

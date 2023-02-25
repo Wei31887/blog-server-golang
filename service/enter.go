@@ -7,6 +7,7 @@ type ServiceGroup struct {
 	CommentService
 	TagService
 	BlogTagService
+	SessionService
 }
 
 var Service = &ServiceGroup{}

@@ -10,7 +10,13 @@ dropdb:
 migrateup:
 	migrate -path db/migrations -database "postgres://root:secret@localhost:5430/go_blog?sslmode=disable" -verbose up
 
+migrateup1:
+	migrate -path db/migrations -database "postgres://root:secret@localhost:5430/go_blog?sslmode=disable" -verbose up 1
+
 migratedown:
 	migrate -path db/migrations -database "postgres://root:secret@localhost:5430/go_blog?sslmode=disable" -verbose down
+
+migratedown1:
+	migrate -path db/migrations -database "postgres://root:secret@localhost:5430/go_blog?sslmode=disable" -verbose down 1
 
 .PHONY: postgres createdb dropdb migrateup migratedown
