@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"blog/server/global"
+	"blog/server/initialize/global"
 	"io"
 	"time"
 
@@ -54,7 +54,6 @@ func Logger() gin.HandlerFunc {
 			zap.String("request-uri", layout.RequestURI),
 			// zap.String("header", layout.Header),
 			zap.String("protocl", layout.Protocl),
-
 		)
 	}
 }

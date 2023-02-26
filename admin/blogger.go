@@ -1,7 +1,7 @@
 package admin
 
 import (
-	G "blog/server/global"
+	"blog/server/initialize/global"
 	"blog/server/middleware"
 	"blog/server/model"
 	"blog/server/model/response"
@@ -48,15 +48,15 @@ func (*AdminBloggerApi) Login(c *gin.Context) {
 	}
 
 	// create access JWT token
-	maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
-	accessToken, accessPayload, err := maker.CreateToken(blogger.Username, G.GLOBAL_CONFIG.JWT.AccessTokenDuration)
+	maker := token.NewJWTMaker(global.GLOBAL_CONFIG.JWT.SigningKey)
+	accessToken, accessPayload, err := maker.CreateToken(blogger.Username, global.GLOBAL_CONFIG.JWT.AccessTokenDuration)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
 	}
 
 	// create refresh JWT token
-	refreshToken, refreshPayload, err := maker.CreateToken(blogger.Username, G.GLOBAL_CONFIG.JWT.RefreshTokenDuration)
+	refreshToken, refreshPayload, err := maker.CreateToken(blogger.Username, global.GLOBAL_CONFIG.JWT.RefreshTokenDuration)
 	if err != nil {
 		response.CodeResponse(c, response.ERROR)
 		return
@@ -91,7 +91,7 @@ func (*AdminBloggerApi) Login(c *gin.Context) {
 
 // Logout
 func (*AdminBloggerApi) Logout(c *gin.Context) {
-	maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
+	maker := token.NewJWTMaker(global.GLOBAL_CONFIG.JWT.SigningKey)
 	payload := c.MustGet(middleware.AuthorizationKey).(*token.Payload)
 
 	if valid := maker.IsInBlackList(payload); valid {

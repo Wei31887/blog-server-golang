@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"blog/server/global"
+	"blog/server/initialize/global"
 	"context"
 	"strconv"
 

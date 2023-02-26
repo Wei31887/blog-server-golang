@@ -1,8 +1,8 @@
 package service
 
 import (
-	G "blog/server/global"
 	"blog/server/initialize"
+	"blog/server/initialize/global"
 	"os"
 	"testing"
 )
@@ -11,10 +11,10 @@ func TestMain(m *testing.M) {
 	path := "../"
 	initialize.Config(path)
 	// initialize.Others()
-	G.GLOBAL_LOG = initialize.Logger()
-	G.GLOBAL_DB = initialize.DataBase()
-	if G.GLOBAL_DB != nil {
-		db, _ := G.GLOBAL_DB.DB()
+	global.GLOBAL_LOG = initialize.Logger()
+	global.GLOBAL_DB = initialize.DataBase()
+	if global.GLOBAL_DB != nil {
+		db, _ := global.GLOBAL_DB.DB()
 		defer db.Close()
 	}
 
