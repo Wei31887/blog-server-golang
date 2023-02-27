@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	G "blog/server/global"
+	"blog/server/initialize/global"
 	"blog/server/model/response"
 	"blog/server/token"
 	"errors"
@@ -27,13 +27,13 @@ func JWT() gin.HandlerFunc {
 		} 
 		
 		// Record the log
-		logger := G.GLOBAL_LOG
+		logger := global.GLOBAL_LOG
 		logger.Debug("Header token: ", zap.String("jwt token:", tokenStr))
 		
 		code := response.SUCCESS
 
 		// JWT authentication
-		maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
+		maker := token.NewJWTMaker(global.GLOBAL_CONFIG.JWT.SigningKey)
 		// Validate the JWT token and the JWT token is in the black list or not
 		payload, err := maker.VerifyToken(tokenStr)
 		if err != nil {

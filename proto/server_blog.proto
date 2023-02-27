@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package pb;
+
+import "rpc_login_blogger.proto";
+
+option go_package = "blog/server";
+
+service BlogServer {
+    rpc LoginBlogger (LoginBloggerRequest) returns (LoginBloggerResponse) {}
+}

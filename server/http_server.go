@@ -1,15 +1,29 @@
-package router
+package server
 
 import (
+	"blog/server/initialize/config"
 	"blog/server/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
+type HTTPServer struct {
+	Router     *gin.Engine
+	Config     *config.Config
+}
+
+func NewHTTPServer(config *config.Config) *HTTPServer {
+	
+	server := &HTTPServer{
+		Config: config,
+	}
+	server.setupRouter()
+	return server
+}
+
+func (server *HTTPServer) setupRouter() {
 	router := gin.New()
-	// gin.Recovery:
-	// Recovery returns a middleware that recovers from any panics and writes a 500 if there was one.
+	router.Use()
 	router.Use(gin.Recovery())
 	router.Static("/static", "static")
 
@@ -19,8 +33,7 @@ func InitRouter() *gin.Engine {
 
 	ApiGroupfrontEndRegister(router)
 	ApiGroupAdminRegister(router)
-
-	return router
+	server.Router = router
 }
 
 func ApiGroupfrontEndRegister(router *gin.Engine) {
@@ -38,7 +51,7 @@ func ApiGroupAdminRegister(router *gin.Engine) {
 	router.POST("/token/refresh", adminApiGroup.RefreshToken)
 
 	jwt := router.Group("/admin", middleware.JWT())
-	{	
+	{
 		jwt.POST("/logout", adminApiGroup.Logout)
 		// blogger
 		jwt.POST("/blogger/find", adminApiGroup.FindBlogger)
@@ -70,4 +83,8 @@ func ApiGroupAdminRegister(router *gin.Engine) {
 		jwt.POST("/comment/updateStatus", adminApiGroup.CommentStatus)
 		jwt.POST("/comment/delete", adminApiGroup.CommentDelete)
 	}
+}
+
+func (server *HTTPServer) RunServer(address string) error {
+	return server.Router.Run(address)
 }

@@ -1,3 +1,0 @@
-1.6773074038242428e+09	info	Request info:	{"status-code": 512, "cost-time": 0.03513725, "client-ip": "::1", "request-method": "POST", "request-uri": "/token/refresh", "protocl": "HTTP/1.1"}
-1.677307409844691e+09	info	Request info:	{"status-code": 200, "cost-time": 0.0488065, "client-ip": "::1", "request-method": "POST", "request-uri": "/login", "protocl": "HTTP/1.1"}
-1.6773074336585448e+09	info	Request info:	{"status-code": 200, "cost-time": 0.031533209, "client-ip": "::1", "request-method": "POST", "request-uri": "/token/refresh", "protocl": "HTTP/1.1"}

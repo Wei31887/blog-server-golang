@@ -11,8 +11,9 @@ type Config struct {
 }
 
 type Server struct {
-	Address string `yaml:"address"`
-	Model   string `yaml:"model"`
+	HTTPAddress string `mapstructure:"http-address" yaml:"http-address"`
+	GrpcAddress string `mapstructure:"grpc-address" yaml:"grpc-address"`
+	Model       string `mapstructure:"model" yaml:"model"`
 }
 
 type Db struct {

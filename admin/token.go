@@ -1,7 +1,7 @@
 package admin
 
 import (
-	G "blog/server/global"
+	"blog/server/initialize/global"
 	"blog/server/model/response"
 	"blog/server/token"
 	"errors"
@@ -30,7 +30,7 @@ func (*AdminTokenApi) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	maker := token.NewJWTMaker(G.GLOBAL_CONFIG.JWT.SigningKey)
+	maker := token.NewJWTMaker(global.GLOBAL_CONFIG.JWT.SigningKey)
 	refreshPayload, err := maker.VerifyToken(req.RefreshToken)
 	if err != nil {
         response.CodeResponse(c, response.ERROR_AUTH_CHECK_TOKEN_FAIL)
@@ -52,7 +52,7 @@ func (*AdminTokenApi) RefreshToken(c *gin.Context) {
 	    return	
 	}
 
-	accessToken, accessPayload, err := maker.CreateToken(refreshPayload.Username, G.GLOBAL_CONFIG.JWT.AccessTokenDuration)
+	accessToken, accessPayload, err := maker.CreateToken(refreshPayload.Username, global.GLOBAL_CONFIG.JWT.AccessTokenDuration)
 	if err != nil {
         response.CodeResponse(c, response.ERROR_AUTH_CHECK_TOKEN_FAIL)
         return
