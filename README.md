@@ -8,9 +8,11 @@
 ## Features
 
 - RESTful API 特色
-- 使用 Gin 框架，提供 middleware 功能，如 admin用戶認證、日誌、跨域等
-- 基於 JWT 認證的 Admin 用戶登入功能
-- 基於 GORM 存取資料庫
+- 使用 Gin 框架，提供 middleware 功能，如 blogger用戶認證、日誌、跨域等
+- 基於 GORM 實現 model 介面，存取資料庫
+- 基於 gRPC 實現用戶登入功能 api 
+- 基於 JWT token-based 認證原理實現 admin 用戶登入功能
+- 基於快取資料庫 Redis 實現登出後用戶 token 失效功能
 - TODO: Dockerfile
 - TODO: API unit test
 - TODO: 系統上線
