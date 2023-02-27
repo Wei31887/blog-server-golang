@@ -1,7 +1,7 @@
 package global
 
 import (
-	"blog/server/config"
+	"blog/server/initialize/config"
 
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"

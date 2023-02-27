@@ -18,9 +18,9 @@ type AdminBloggerApi struct{}
 type loginResponse struct {
 	SessionId        uuid.UUID `json:"session_id"`
 	AccessToken      string    `json:"access_token"`
-	AccessExpiredAt  time.Time `json:"access_expired_at"`
+	AccessExpiredAt  time.Time `json:"access_token_expired_at"`
 	RefreshToken     string    `json:"refresh_token"`
-	RefreshExpiredAt time.Time `json:"refresh_expired_at"`
+	RefreshExpiredAt time.Time `json:"refresh_token_expired_at"`
 }
 
 // Login
