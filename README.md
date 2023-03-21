@@ -27,6 +27,9 @@
 6. [uber-go/zap](https://github.com/uber-go/zap) zap實現日誌log管理
 7. [go-redis] 使用 Redis 實現 JWT 登出後 token 失效功能
 
+## 資料庫
+![](./go-blog.png)
+
 ## 環境
 
 需要在local 安装 [go] [gin] [node](http://nodejs.org/) 和 [git](https://git-scm.com/) 

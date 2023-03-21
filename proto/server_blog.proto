@@ -3,9 +3,15 @@ syntax = "proto3";
 package pb;
 
 import "rpc_login_blogger.proto";
+import "google/api/annotations.proto";
 
 option go_package = "blog/server";
 
 service BlogServer {
-    rpc LoginBlogger (LoginBloggerRequest) returns (LoginBloggerResponse) {}
+    rpc LoginBlogger (LoginBloggerRequest) returns (LoginBloggerResponse) {
+        option (google.api.http) = {
+            post: "/v1/login"
+            body: "*"
+        };
+    }
 }

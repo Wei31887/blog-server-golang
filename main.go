@@ -7,6 +7,7 @@ import (
 	"blog/server/initialize/global"
 	"blog/server/pb"
 	"blog/server/server"
+	"context"
 	"log"
 	"net"
 	"net/http"
@@ -14,6 +15,7 @@ import (
 	"os/signal"
 
 	"github.com/gin-gonic/gin"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -36,8 +38,9 @@ func main() {
 	gin.SetMode(global.GLOBAL_CONFIG.Server.Model)
 
 	// Running server
-	// go runHttpServer(global.GLOBAL_CONFIG)
+	go runHttpServer(global.GLOBAL_CONFIG)
 	runGrpcServer(global.GLOBAL_CONFIG)
+	// runGatwayServer(global.GLOBAL_CONFIG)
 
 
 	quit := make(chan os.Signal)
@@ -71,5 +74,32 @@ func runGrpcServer(config *config.Config) {
 	err = grpcServer.Serve(listener)
 	if err != nil {
 		log.Fatalf("cannot start gRPC server: %s", err)
+	}
+}
+
+func runGatwayServer(config *config.Config) {
+	server := gapi.NewGRPCServer(config)
+
+	grpcMux := runtime.NewServeMux()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	err := pb.RegisterBlogServerHandlerServer(ctx, grpcMux, server)
+	if err != nil {
+		log.Fatalf("cannot create HTTP gateway server: %s", err)
+	}
+
+	mux := http.NewServeMux()
+	mux.Handle("/", grpcMux)
+
+	listener, err := net.Listen("tcp", config.Server.HTTPAddress)
+	if err != nil {
+		log.Fatalf("cannot create listener: %s", err)
+	}
+
+	log.Printf("start HTTP gateway server at %s", listener.Addr().String())
+	err = http.Serve(listener, mux)
+	if err != nil {
+		log.Fatalf("cannot start HTTP gateway server: %s", err)
 	}
 }
