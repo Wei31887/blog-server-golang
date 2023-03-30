@@ -6,26 +6,27 @@
 - **[Admin Front-end Project](https://github.com/Wei31887/blog-admin-vue)**
 
 ## Features
-
-- RESTful API 特色
-- 使用 Gin 框架，提供 middleware 功能，如 blogger用戶認證、日誌、跨域等
-- 基於 GORM 實現 model 介面，存取資料庫
+- 後端 API 符合 RESTful API 風格
+- 使用 Gin 框架，架設 middleware 功能，
+    - JWT token 用戶認證
+    - 日誌管理、跨域
+- 基於 GORM 之 Golang ORM 套件映射 model 介面，維護存取資料庫功能
 - 基於 gRPC 實現用戶登入功能 api 
 - 基於 JWT token-based 認證原理實現 admin 用戶登入功能
 - 基於快取資料庫 Redis 實現登出後用戶 token 失效功能
+
 - TODO: Dockerfile
 - TODO: API unit test
 - TODO: 系統上線
 
 ## 技術
-
 1. [gin-gonic/gin](https://github.com/gin-gonic/gin) Gin 框架實現 RESTful API 及 middleware 處理
 2. [jwt-go](https://github.com/dgrijalva/jwt-go) 實現 JWT 認證
 3. [golang-migrate/migrate](https://github.com/golang-migrate/migrate) 實現資料庫遷移
 4. [gorm.io/gorm](https://gorm.io) 實現存取資料庫
 5. [viper](https://github.com/spf13/viper) 實現 config 初始化
 6. [uber-go/zap](https://github.com/uber-go/zap) zap實現日誌log管理
-7. [go-redis] 使用 Redis 實現 JWT 登出後 token 失效功能
+7. [go-redis](https://github.com/redis/go-redis) 使用 Redis 實現 JWT 登出後 token 失效功能
 
 ## 資料庫
 ![](./go-blog.png)

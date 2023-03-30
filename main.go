@@ -39,7 +39,7 @@ func main() {
 
 	// Running server
 	go runHttpServer(global.GLOBAL_CONFIG)
-	runGrpcServer(global.GLOBAL_CONFIG)
+	// runGrpcServer(global.GLOBAL_CONFIG)
 	// runGatwayServer(global.GLOBAL_CONFIG)
 
 
