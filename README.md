@@ -28,6 +28,28 @@
 6. [uber-go/zap](https://github.com/uber-go/zap) zap實現日誌log管理
 7. [go-redis](https://github.com/redis/go-redis) 使用 Redis 實現 JWT 登出後 token 失效功能
 
+## 目錄架構
+```
+    ├── server
+        ├── admin           (admin專用api層)
+        ├── api             (api層)
+        ├── db              (database migration)
+        ├── gapi            (gRPC api層)
+        ├── initialize      (初始化)                        
+        │   ├── internal    (初始化 config結構)
+        │   └── global      (初始化全域變數)                              
+        ├── middleware      (中間件層級)                        
+        ├── model           (資料模型model)                    
+        │   ├── request     (requesut結構)                        
+        │   └── response    (response結構)                              
+        ├── pb              (grpc server層)                        
+        ├── proto           (grpc protobuf)                                               
+        ├── server          (http server路由層)                    
+        ├── static          (靜態資源層)                    
+        ├── token           (JWT token層)                    
+        └── utils           (工具包)                                     
+```
+
 ## 資料庫
 ![](./go-blog.png)
 

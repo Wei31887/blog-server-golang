@@ -28,7 +28,7 @@ func (*AdminBlogApi) BlogSave(c *gin.Context) {
 		for _, tag := range blog.Tags {
 			blogTag := &model.BlogTag{ 
 				BlogId: blog.Id,
-				TagId:  tag.Id,
+				TagId:  tag.TagId,
 			}
 			if err := blogTagService.Create(blogTag); err != nil {
 				code = response.ERROR
@@ -42,7 +42,7 @@ func (*AdminBlogApi) BlogSave(c *gin.Context) {
 		for _, tag := range blog.Tags {
 			blogTag := &model.BlogTag{ 
 				BlogId: blog.Id,
-				TagId:  tag.Id,
+				TagId:  tag.TagId,
 			}
 			if err := blogTagService.Update(blogTag); err != nil {
 				code = response.ERROR
