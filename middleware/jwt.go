@@ -17,7 +17,7 @@ var (
 // JWT : middleware function, validation layer between request and response
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenStr := c.GetHeader("token")
+		tokenStr := c.GetHeader("access_token")
 
 		// Check the token from header is empty or not
 		if len(tokenStr) == 0 {

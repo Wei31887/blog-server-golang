@@ -3,6 +3,7 @@ package service
 import (
 	"blog/server/initialize/global"
 	"blog/server/model"
+	adminresponse "blog/server/model/response/admin"
 	"blog/server/utils"
 )
 
@@ -11,9 +12,11 @@ type CommentService struct{}
 
 // var commentService CommentService
 
-func (*CommentService) FindCommentList(page utils.Page) ([]*model.Comment, error) {
-	commentLists := make([]*model.Comment, 0)
-	err := global.GLOBAL_DB.Model(&model.Comment{}).
+func (*CommentService) FindCommentList(page utils.Page) ([]*adminresponse.CommentListResponse, error) {
+	commentLists := make([]*adminresponse.CommentListResponse, 0)
+	err := global.GLOBAL_DB.Table("comment").
+		Select("comment.add_time, comment.blog_id, blog.title, comment.content, comment.id, comment.ip, comment.nick_name, comment.status").
+		Joins("left join blog on comment.blog_id = blog.id").
 		Limit(page.Size).
 		Offset(page.GetStartPage()).
 		Find(&commentLists).Error

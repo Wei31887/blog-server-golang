@@ -14,12 +14,12 @@ import (
 type AdminTokenApi struct{}
 
 type refreshTokenRequest struct {
-	RefreshToken string `json:"refresh_token"`
+	RefreshToken string `json:"refresh_token" binding:"required"`
 }
 
 type refreshTokenResponse struct {
 	AccessToken      string       `json:"access_token"`
-	AccessExpiredAt  time.Time    `json:"access_expired_at"`
+	AccessExpiredAt  time.Time    `json:"access_token_expired_at"`
 }
 
 func (*AdminTokenApi) RefreshToken(c *gin.Context) {

@@ -39,11 +39,11 @@ func main() {
 
 	// Running server
 	go runHttpServer(global.GLOBAL_CONFIG)
-	runGrpcServer(global.GLOBAL_CONFIG)
+	// runGrpcServer(global.GLOBAL_CONFIG)
 	// runGatwayServer(global.GLOBAL_CONFIG)
 
 
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	// listen
 	signal.Notify(quit, os.Interrupt)
 	<-quit
