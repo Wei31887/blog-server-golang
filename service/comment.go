@@ -19,6 +19,7 @@ func (*CommentService) FindCommentList(page utils.Page) ([]*adminresponse.Commen
 		Joins("left join blog on comment.blog_id = blog.id").
 		Limit(page.Size).
 		Offset(page.GetStartPage()).
+		Order("comment.id desc").
 		Find(&commentLists).Error
 	return commentLists, err
 }
